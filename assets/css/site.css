@@ -1,0 +1,856 @@
+/* Roda — site institucional */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+}
+
+.envoltorio {
+  width: min(1160px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.pular {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 20;
+  padding: 10px 16px;
+  border-radius: var(--raio-pilula);
+  background: var(--lima);
+  color: var(--noite);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.pular:focus {
+  top: 12px;
+  color: var(--noite);
+}
+
+/* Cabeçalho */
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10, 13, 9, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(43, 54, 39, 0.6);
+}
+
+.cabecalho .envoltorio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 72px;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.marca img {
+  width: 36px;
+  height: 36px;
+}
+
+.marca span {
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--lima);
+  text-shadow: 0 0 14px rgba(200, 255, 62, 0.55);
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.menu a:not(.btn) {
+  color: var(--apoio);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.menu a:not(.btn):hover {
+  color: var(--texto);
+}
+
+.cabecalho .btn {
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 15px;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 72px 0 96px;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto auto;
+  width: 720px;
+  height: 720px;
+  background: radial-gradient(circle, rgba(200, 255, 62, 0.14), rgba(200, 255, 62, 0) 62%);
+  pointer-events: none;
+}
+
+.hero .envoltorio {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: 48px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 76px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.hero h1 .linha-2 {
+  display: block;
+  color: var(--lima);
+  text-shadow: 0 0 28px rgba(200, 255, 62, 0.5);
+}
+
+.hero-texto {
+  max-width: 34em;
+  margin: 28px 0 0;
+  font-size: 19px;
+  line-height: 1.55;
+  color: #c9d3c2;
+}
+
+.hero-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.hero-acoes .btn {
+  min-height: 56px;
+  padding: 0 28px;
+}
+
+.hero-fatos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin: 44px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-fatos li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--apoio);
+  font-size: 15px;
+}
+
+.hero-fatos strong {
+  font-family: var(--fonte-titulo);
+  font-size: 28px;
+  color: var(--texto);
+}
+
+/* Telefone dentro do anel */
+.palco {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 680px;
+}
+
+.palco-anel {
+  position: absolute;
+  width: 640px;
+  height: 640px;
+  max-width: 140%;
+  filter: drop-shadow(0 0 10px rgba(200, 255, 62, 0.7)) drop-shadow(0 0 32px rgba(200, 255, 62, 0.3));
+}
+
+.palco-anel path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: desenhar 0.9s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+}
+
+.palco-anel path:nth-child(1) { animation-delay: 0.2s; }
+.palco-anel path:nth-child(2) { animation-delay: 0.65s; }
+.palco-anel path:nth-child(3) { animation-delay: 1.1s; }
+.palco-anel path:nth-child(4) { animation-delay: 1.55s; }
+
+@keyframes desenhar {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .palco-anel path {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+}
+
+.telefone {
+  --escala: 0.7846;
+  position: relative;
+  width: calc(390px * var(--escala) + 24px);
+  height: calc(844px * var(--escala) + 24px);
+  padding: 12px;
+  border-radius: 48px;
+  background: #050705;
+  box-shadow: 0 0 0 1px #2b3627, 0 0 0 8px #10150e, 0 40px 80px -30px rgba(0, 0, 0, 0.8);
+}
+
+.telefone-tela {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 38px;
+  background: var(--noite);
+}
+
+.telefone iframe {
+  display: block;
+  width: 390px;
+  height: 844px;
+  border: 0;
+  transform: scale(var(--escala));
+  transform-origin: 0 0;
+  background: var(--noite);
+}
+
+.telefone-legenda {
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--apoio);
+}
+
+/* Seções */
+.secao {
+  padding: 112px 0;
+  border-top: 1px solid rgba(43, 54, 39, 0.6);
+}
+
+.secao h2 {
+  max-width: 18em;
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.secao-intro {
+  max-width: 38em;
+  margin: 20px 0 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #c9d3c2;
+}
+
+/* Problema */
+.problema {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: end;
+}
+
+.dado {
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: clamp(64px, 11vw, 148px);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--rosa);
+  text-shadow: 0 0 40px rgba(255, 79, 203, 0.45);
+}
+
+.dado-legenda {
+  margin: 20px 0 0;
+  max-width: 24em;
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.citacao {
+  margin: 0;
+  padding: 28px;
+  border-left: 3px solid var(--rosa);
+  background: #160f15;
+  border-radius: 0 20px 20px 0;
+}
+
+.citacao p {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 22px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.citacao footer {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--apoio);
+}
+
+.fonte {
+  margin: 32px 0 0;
+  font-size: 13px;
+  color: var(--apoio);
+}
+
+/* Como funciona */
+.passos {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: passo;
+}
+
+.passos li {
+  position: relative;
+  padding: 28px 24px 0 0;
+  border-top: 2px solid var(--linha);
+  counter-increment: passo;
+}
+
+.passos li::before {
+  content: counter(passo);
+  position: absolute;
+  top: -18px;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--noite);
+  border: 2px solid var(--lima);
+  color: var(--lima);
+  font-family: var(--fonte-titulo);
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(200, 255, 62, 0.4);
+}
+
+.passos h3 {
+  margin: 12px 0 0;
+  font-family: var(--fonte-titulo);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.passos p {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--apoio);
+}
+
+/* Comparação */
+.comparacao {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 56px;
+}
+
+.coluna {
+  padding: 32px;
+  border-radius: 24px;
+  border: 1px solid var(--linha);
+  background: var(--superficie);
+}
+
+.coluna-roda {
+  border: 0;
+  background: #10150e;
+  box-shadow: 0 0 0 1.5px var(--lima), 0 0 40px rgba(200, 255, 62, 0.18);
+}
+
+.coluna h3 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.coluna-roda h3 {
+  color: var(--lima);
+}
+
+.coluna ul {
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.coluna li {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #c9d3c2;
+}
+
+.coluna li + li {
+  border-top: 1px solid #232c1f;
+}
+
+.coluna li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.coluna-padrao li svg {
+  color: #6e7b68;
+}
+
+.coluna-roda li svg {
+  color: var(--lima);
+}
+
+/* Salas */
+.salas-grade {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 56px;
+}
+
+.sala-exemplo {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid var(--linha);
+  background: var(--superficie);
+}
+
+.sala-exemplo:first-child {
+  grid-row: span 2;
+  border: 0;
+  background: #160f15;
+  box-shadow: 0 0 0 1.5px var(--rosa), 0 0 40px rgba(255, 79, 203, 0.2);
+}
+
+.sala-exemplo small {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--lima);
+}
+
+.sala-exemplo:first-child small {
+  color: var(--rosa);
+}
+
+.sala-exemplo h3 {
+  margin: 10px 0 0;
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.sala-exemplo:first-child h3 {
+  font-size: 30px;
+}
+
+.sala-exemplo p {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--apoio);
+}
+
+.vagas-linha {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.vagas-linha span {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--linha-forte);
+}
+
+.vagas-linha span.ocupada {
+  border: 0;
+  background: var(--lima);
+  box-shadow: 0 0 8px rgba(200, 255, 62, 0.7);
+}
+
+/* Planos */
+.planos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 56px;
+}
+
+.plano {
+  display: flex;
+  flex-direction: column;
+  padding: 36px;
+  border-radius: 28px;
+  border: 1px solid var(--linha);
+  background: var(--superficie);
+}
+
+.plano-cuidado {
+  border: 0;
+  background: #160f15;
+  box-shadow: 0 0 0 1.5px var(--rosa), 0 0 40px rgba(255, 79, 203, 0.2);
+}
+
+.plano h3 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.plano .plano-preco {
+  margin: 20px 0 0;
+  font-family: var(--fonte-titulo);
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.plano .plano-preco span {
+  font-family: var(--fonte-texto);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--apoio);
+}
+
+.plano-cuidado .plano-preco {
+  text-shadow: 0 0 24px rgba(255, 79, 203, 0.6);
+}
+
+.plano > p {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #c9d3c2;
+}
+
+.plano ul {
+  margin: 24px 0 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.plano li {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.plano li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--lima);
+}
+
+.plano-cuidado li svg {
+  color: var(--rosa);
+}
+
+.plano .btn {
+  margin-top: auto;
+}
+
+.aviso-cuidado {
+  margin: 16px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9b3c2;
+}
+
+.parceiros {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.parceiros div {
+  padding: 28px 32px;
+  border-radius: 24px;
+  border: 1px dashed var(--linha-forte);
+}
+
+.parceiros h3 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.parceiros p {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--apoio);
+}
+
+/* Segurança */
+.seguranca {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seguranca li {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.seguranca svg {
+  color: var(--lima);
+}
+
+.seguranca strong {
+  font-family: var(--fonte-titulo);
+  font-size: 17px;
+}
+
+.seguranca span {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--apoio);
+}
+
+/* Chamada final */
+.final {
+  padding: 120px 0;
+  text-align: center;
+  border-top: 1px solid rgba(43, 54, 39, 0.6);
+  background: radial-gradient(circle at 50% 100%, rgba(200, 255, 62, 0.12), rgba(200, 255, 62, 0) 55%);
+}
+
+.final img {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.final h2 {
+  margin: 32px auto 0;
+  max-width: 16em;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: clamp(30px, 4.5vw, 54px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.final p {
+  margin: 20px auto 0;
+  max-width: 32em;
+  font-size: 18px;
+  color: #c9d3c2;
+}
+
+.final .btn {
+  margin-top: 36px;
+  min-height: 60px;
+  padding: 0 36px;
+  font-size: 17px;
+}
+
+/* Rodapé */
+.rodape {
+  padding: 48px 0;
+  border-top: 1px solid rgba(43, 54, 39, 0.6);
+}
+
+.rodape .envoltorio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.rodape p {
+  margin: 12px 0 0;
+  max-width: 36em;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--apoio);
+}
+
+.rodape nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.rodape nav a {
+  color: var(--apoio);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.rodape nav a:hover {
+  color: var(--texto);
+}
+
+/* Responsivo */
+@media (max-width: 1000px) {
+  .hero .envoltorio,
+  .problema {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .palco {
+    min-height: 620px;
+    margin-top: 24px;
+  }
+
+  .passos {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .passos li {
+    padding: 0 0 36px 56px;
+    border-top: 0;
+    border-left: 2px solid var(--linha);
+    margin-left: 17px;
+  }
+
+  .passos li:last-child {
+    padding-bottom: 0;
+    border-left-color: transparent;
+  }
+
+  .passos li::before {
+    top: 0;
+    left: -18px;
+  }
+
+  .passos h3 {
+    margin-top: 4px;
+  }
+
+  .salas-grade {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .seguranca {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+}
+
+@media (max-width: 760px) {
+  .menu a:not(.btn) {
+    display: none;
+  }
+
+  .hero {
+    padding: 48px 0 72px;
+  }
+
+  .hero-texto {
+    font-size: 17px;
+  }
+
+  .palco {
+    min-height: 560px;
+  }
+
+  .palco-anel {
+    width: 520px;
+    height: 520px;
+  }
+
+  .telefone {
+    --escala: 0.6564;
+    border-radius: 42px;
+  }
+
+  .telefone-tela {
+    border-radius: 32px;
+  }
+
+  .secao {
+    padding: 80px 0;
+  }
+
+  .comparacao,
+  .planos,
+  .parceiros,
+  .salas-grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sala-exemplo:first-child {
+    grid-row: auto;
+  }
+
+  .sala-exemplo:first-child h3 {
+    font-size: 24px;
+  }
+
+  .plano,
+  .coluna {
+    padding: 28px 24px;
+  }
+
+  .plano .plano-preco {
+    font-size: 44px;
+  }
+}
