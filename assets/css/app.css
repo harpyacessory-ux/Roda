@@ -1297,6 +1297,58 @@ body.app {
   background: var(--superficie);
 }
 
+.kits {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 78%;
+  gap: 12px;
+  margin: 14px 0 0;
+  padding: 0 0 10px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+
+.kit {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--linha);
+  border-radius: 18px;
+  background: var(--superficie);
+  scroll-snap-align: start;
+}
+
+.kit img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.kit div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9d3c2;
+}
+
+.kit strong {
+  font-family: var(--fonte-titulo);
+  font-size: 16px;
+  color: var(--texto);
+}
+
+.kit .kit-para {
+  font-weight: 800;
+  color: var(--lima);
+}
+
 .icone-quadro {
   display: inline-flex;
   align-items: center;

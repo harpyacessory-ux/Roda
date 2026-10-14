@@ -92,6 +92,7 @@
     estrela: '<path d="M12 3l1.8 4.7L19 9l-4 3.3 1.2 5.2L12 15l-4.2 2.5L9 12.3 5 9l5.2-1.3z"/>',
     cadeado: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
     mais: '<path d="M12 5v14"/><path d="M5 12h14"/>',
+    presente: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8c-1.5-3-5-3.5-5-1s3 1 5 1c2 0 5 1.5 5-1s-3.5-2-5 1z"/>',
     menos: '<path d="M5 12h14"/>'
   };
 
@@ -641,14 +642,27 @@
     );
   }
 
+  var KITS = [
+    ['pausa', 'Pausa', 'Para fases de ansiedade', 'Caderno de escrita guiada, chás de ervas, bolinha para apertar e cartas de respiração.'],
+    ['foco', 'Foco', 'Para mente acelerada e TDAH', 'Bolinha sensorial para mãos inquietas, cartões de rotina, chás e camomila.'],
+    ['conexao', 'Conexão', 'Para fases de desânimo e isolamento', 'Cartas "Vamos conversar?", dominó e dados para levar ao encontro e uma surpresa.'],
+    ['descanso', 'Descanso', 'Para noites difíceis', 'Máscara de dormir, protetores auriculares e cartas para a hora de deitar.']
+  ];
+
   function telaCuidado() {
     var beneficios = [
       ['conversa', 'Sessões com psicólogo', 'Atendimento online com psicólogos registrados no CRP.'],
       ['grafico', 'Acompanhamento na plataforma', 'Suas rodas, presenças e metas de conexão, revisadas com o profissional.'],
       ['balao', 'Métodos para se comunicar', 'Exercícios guiados, roteiros para puxar conversa e desafios para levar aos encontros.'],
+      ['presente', 'Kit de cuidado todo mês', 'Uma esfera na sua porta com itens escolhidos para o seu momento, junto com o psicólogo.'],
       ['escudoMais', 'Encaminhamento médico, se indicado', 'Quando houver necessidade de medicação, a avaliação e a receita ficam com um psiquiatra.']
     ].map(function (b) {
       return '<li><span class="icone-quadro">' + icone(b[0]) + '</span><div><strong>' + b[1] + '</strong><span>' + b[2] + '</span></div></li>';
+    }).join('');
+
+    var kits = KITS.map(function (k) {
+      return '<li class="kit"><img src="../assets/img/kit-' + k[0] + '.jpg" width="800" height="800" alt="Kit ' + k[1] + ' aberto" loading="lazy">' +
+        '<div><strong>' + k[1] + '</strong><span class="kit-para">' + k[2] + '</span><span>' + esc(k[3]) + '</span></div></li>';
     }).join('');
 
     var acao = estado.assinante
@@ -666,6 +680,10 @@
       '<div class="preco"><div><small>Plano mensal</small><strong>R$ 59,90</strong></div><span>por mês</span></div>' +
       '<h2 class="secao-titulo" style="font-size:15px;margin-top:28px">O que está incluído</h2>' +
       '<ul class="beneficios">' + beneficios + '</ul>' +
+      '<h2 class="secao-titulo" style="font-size:15px;margin-top:28px">Os kits do mês</h2>' +
+      '<p class="texto-apoio" style="margin-top:4px">Deslize para conhecer. O kit é definido na triagem e pode mudar a cada mês.</p>' +
+      '<ul class="kits" aria-label="Kits de cuidado">' + kits + '</ul>' +
+      '<p class="nota" style="text-align:left">Os kits apoiam o acompanhamento e não substituem tratamento. Fitoterápicos só entram com indicação do profissional. Imagens ilustrativas.</p>' +
       '<div class="card card-tracejado"><div class="linha-info"><span style="color:var(--rosa)">' + icone('info') + '</span>' +
         '<span>A Roda Cuidado não é atendimento de emergência. Em um momento de crise, ligue 188 (CVV), gratuito e 24 horas.</span></div></div>' +
       '<div class="espaco"></div>' + acao + navApp('cuidado')
