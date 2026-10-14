@@ -278,7 +278,7 @@
       return '';
     }).join('');
     return '<svg viewBox="0 0 100 100" fill="none" stroke-width="7" stroke-linecap="round" aria-hidden="true">' +
-      '<g stroke="#232c1f">' + trilha + '</g><g stroke="#c8ff3e">' + acesos + '</g></svg>';
+      '<g style="stroke:var(--superficie-3)">' + trilha + '</g><g style="stroke:var(--lima-traco)">' + acesos + '</g></svg>';
   }
 
   function miniAnel(presencas) {
@@ -309,7 +309,7 @@
 
   function telaBoasVindas() {
     return tela(
-      '<div class="topo"><span class="marca"><img src="' + LOGO + '" alt=""><span>roda</span></span></div>' +
+      '<div class="topo"><span class="marca"><img src="' + LOGO + '" alt=""><span>roda</span></span>' + (window.RodaTema ? RodaTema.botao() : '') + '</div>' +
       '<div class="bv-logo"><img src="' + LOGO + '" width="200" height="200" alt="Logo da Roda: seis pessoas de mãos dadas formando um círculo"></div>' +
       '<h1 class="titulo" style="margin-top:0">Amizade não acontece por acaso. <span class="destaque-lima">Acontece por repetição.</span></h1>' +
       '<p class="texto-apoio">Um grupo fixo de seis pessoas, quatro encontros no mesmo lugar e horário. O app fica nos bastidores; o rolê é fora da tela.</p>' +
@@ -384,13 +384,13 @@
       '<h1 class="titulo">Conheça sua roda</h1>' +
       '<p class="texto-apoio">Seis pessoas com afinidade e a mesma agenda. O primeiro encontro é o primeiro olá.</p>' +
       '<div class="meta-roda">' +
-        '<div><span style="color:var(--lima)">' + icone('calendario', 18) + '</span><strong>' + info.horario.nome + '</strong><span>4 semanas</span></div>' +
-        '<div><span style="color:var(--lima)">' + icone('relogio', 18) + '</span><strong>' + info.horario.hora + '</strong><span>cerca de 2h30</span></div>' +
-        '<div><span style="color:var(--lima)">' + icone('pino', 18) + '</span><strong>' + info.bairro + '</strong><span>' + info.local.toLowerCase() + '</span></div>' +
+        '<div><span style="color:var(--lima-texto)">' + icone('calendario', 18) + '</span><strong>' + info.horario.nome + '</strong><span>4 semanas</span></div>' +
+        '<div><span style="color:var(--lima-texto)">' + icone('relogio', 18) + '</span><strong>' + info.horario.hora + '</strong><span>cerca de 2h30</span></div>' +
+        '<div><span style="color:var(--lima-texto)">' + icone('pino', 18) + '</span><strong>' + info.bairro + '</strong><span>' + info.local.toLowerCase() + '</span></div>' +
       '</div>' +
       '<div class="cabecalho-lista"><h2>Integrantes</h2><span>6 de 6</span></div>' +
       '<div class="integrantes">' + pessoas + '</div>' +
-      '<div class="card card-tracejado"><div class="linha-info"><span style="color:var(--lima)">' + icone('estrela') + '</span>' +
+      '<div class="card card-tracejado"><div class="linha-info"><span style="color:var(--lima-texto)">' + icone('estrela') + '</span>' +
         '<span><strong style="display:block;color:var(--texto);font-size:14px;margin-bottom:3px">Por que esta combinação</strong>Mesma disponibilidade, bairros próximos e profissões diferentes, para fugir da bolha. Sem fotos até o primeiro encontro.</span></div></div>' +
       '<div class="espaco"></div>' +
       '<a class="btn btn-lima btn-bloco" href="#/agenda">Ver agenda do ciclo ' + icone('seta', 20, 2.4) + '</a>' +
@@ -421,10 +421,10 @@
     }).join('');
 
     var mapa =
-      '<svg class="mapa" viewBox="0 0 92 92" aria-hidden="true"><rect width="92" height="92" fill="#0f140d"/>' +
-      '<rect x="54" y="8" width="30" height="26" rx="4" fill="#16240f"/>' +
-      '<path d="M0 30 L92 22" stroke="#26311f" stroke-width="6"/><path d="M0 64 L92 58" stroke="#26311f" stroke-width="5"/>' +
-      '<path d="M28 0 L36 92" stroke="#26311f" stroke-width="6"/><path d="M66 40 L72 92" stroke="#26311f" stroke-width="4"/>' +
+      '<svg class="mapa" viewBox="0 0 92 92" aria-hidden="true"><rect width="92" height="92" style="fill:var(--mapa-fundo)"/>' +
+      '<rect x="54" y="8" width="30" height="26" rx="4" style="fill:var(--mapa-quadra)"/>' +
+      '<path d="M0 30 L92 22" style="stroke:var(--mapa-rua)" stroke-width="6"/><path d="M0 64 L92 58" style="stroke:var(--mapa-rua)" stroke-width="5"/>' +
+      '<path d="M28 0 L36 92" style="stroke:var(--mapa-rua)" stroke-width="6"/><path d="M66 40 L72 92" style="stroke:var(--mapa-rua)" stroke-width="4"/>' +
       '<circle cx="49" cy="44" r="14" fill="#c8ff3e" opacity="0.14"/>' +
       '<path d="M49 52 s-8-7-8-13 a8 8 0 0 1 16 0 c0 6-8 13-8 13z" fill="#c8ff3e"/><circle cx="49" cy="39" r="3" fill="#0a0d09"/></svg>';
 
@@ -485,7 +485,7 @@
   function telaRevelacao() {
     var p = estado.presencas;
     var topo = '<div class="topo">' + btnVoltar('#/agenda', 'Voltar para a agenda') +
-      '<span class="etiqueta" style="border-color:rgba(255,79,203,.55);color:var(--rosa);padding:7px 12px">' + icone('cadeado', 14) + ' Escolha secreta</span></div>';
+      '<span class="etiqueta" style="border-color:rgba(255,79,203,.55);color:var(--rosa-texto);padding:7px 12px">' + icone('cadeado', 14) + ' Escolha secreta</span></div>';
 
     if (p < 4) {
       var faltam = 4 - p;
@@ -528,8 +528,8 @@
     var itens = m
       ? matches.map(function (o) {
           return '<li><span class="avatar avatar-pequeno">' + o[0].charAt(0) + '</span>' +
-            '<span class="pessoa-texto" style="flex-grow:1"><strong>' + o[0] + '</strong><small style="color:var(--rosa-claro)">Match mútuo</small></span>' +
-            '<button class="btn btn-texto btn-pequeno" type="button" data-acao="mandarOi" data-nome="' + o[0] + '" style="color:var(--lima)">Mandar oi</button></li>';
+            '<span class="pessoa-texto" style="flex-grow:1"><strong>' + o[0] + '</strong><small style="color:var(--rosa-claro-texto)">Match mútuo</small></span>' +
+            '<button class="btn btn-texto btn-pequeno" type="button" data-acao="mandarOi" data-nome="' + o[0] + '" style="color:var(--lima-texto)">Mandar oi</button></li>';
         }).join('')
       : '<li><span class="texto-apoio" style="margin:0">Desta vez o interesse não coincidiu. Uma nova roda é uma nova chance.</span></li>';
 
@@ -539,11 +539,11 @@
       '<p class="texto-apoio centro">' + (m === 0 ? 'Suas escolhas continuam em segredo.' : m === 1 ? '1 match mútuo. A conversa já está liberada.' : m + ' matches mútuos. As conversas já estão liberadas.') + '</p>' +
       '<ul class="lista-matches">' + itens + '</ul>' +
       '<div class="espaco"></div>' +
-      '<div class="card card-neon"><p class="sobretitulo" style="margin:0;color:var(--lima)">Próximo ciclo</p>' +
+      '<div class="card card-neon"><p class="sobretitulo" style="margin:0;color:var(--lima-texto)">Próximo ciclo</p>' +
         '<strong style="display:block;margin-top:4px;font-family:var(--fonte-titulo);font-size:15px">Renovar como roda fechada</strong>' +
         '<span style="display:block;margin-top:4px;font-size:13px;color:var(--apoio)">Mesmo grupo, mais 4 encontros por R$ 79 o ciclo.</span>' +
         '<button class="btn btn-lima btn-bloco" type="button" data-acao="renovar" style="margin-top:14px;min-height:48px">Renovar a roda</button></div>' +
-      '<button class="btn btn-texto btn-bloco" type="button" data-acao="refazerEscolha" style="margin-top:6px;color:var(--lima)">Refazer escolha</button>'
+      '<button class="btn btn-texto btn-bloco" type="button" data-acao="refazerEscolha" style="margin-top:6px;color:var(--lima-texto)">Refazer escolha</button>'
     );
   }
 
@@ -593,8 +593,8 @@
       '<div class="sala-topo"><span class="sala-etiquetas"><span class="etiqueta etiqueta-lima">' + x.s.tipo + '</span>' + selo + '</span>' +
       '<span class="sala-motivo">' + x.motivo + '</span></div>' +
       '<h3>' + x.s.titulo + '</h3>' +
-      '<span class="sala-info"><span style="color:var(--lima)">' + icone('relogio', 14) + '</span>' + x.quando + '</span>' +
-      '<span class="sala-info"><span style="color:var(--lima)">' + icone('pino', 14) + '</span>' + x.s.local + '</span>' +
+      '<span class="sala-info"><span style="color:var(--lima-texto)">' + icone('relogio', 14) + '</span>' + x.quando + '</span>' +
+      '<span class="sala-info"><span style="color:var(--lima-texto)">' + icone('pino', 14) + '</span>' + x.s.local + '</span>' +
       '<div class="sala-rodape"><div class="vagas"><div class="vagas-pontos" aria-hidden="true">' + pontos + '</div>' + legenda + '</div>' + botao + '</div>' +
       '</article>';
   }
@@ -621,7 +621,7 @@
     var cartaoRoda = p < 4
       ? '<a class="cartao-roda" href="#/agenda">' + miniAnel(p) +
         '<span class="cartao-roda-texto"><small>Sua roda: ' + p + ' de 4 encontros</small><strong>' + info.encontros[p].data + '</strong>' +
-        '<span>Semana ' + (p + 1) + ': ' + TEMAS[p] + '</span></span>' + '<span style="color:var(--lima)">' + svg('<path d="M9 6l6 6-6 6"/>', 20, 2.2) + '</span></a>'
+        '<span>Semana ' + (p + 1) + ': ' + TEMAS[p] + '</span></span>' + '<span style="color:var(--lima-texto)">' + svg('<path d="M9 6l6 6-6 6"/>', 20, 2.2) + '</span></a>'
       : '<a class="cartao-roda" href="#/revelacao">' + miniAnel(4) +
         '<span class="cartao-roda-texto"><small>Ciclo completo</small><strong>Hora da revelação</strong><span>Escolha com quem quer manter contato</span></span></a>';
 
@@ -700,7 +700,7 @@
       '<h2 class="secao-titulo" style="font-size:15px;margin-top:28px">Quem faz a rede</h2>' +
       '<ul class="beneficios">' + rede + '</ul>' +
       '<p class="nota" style="text-align:left">Apoiadores não têm acesso aos seus dados nem indicam tratamento ou remédio. Essa decisão é sempre do profissional.</p>' +
-      '<div class="card card-tracejado"><div class="linha-info"><span style="color:var(--rosa)">' + icone('info') + '</span>' +
+      '<div class="card card-tracejado"><div class="linha-info"><span style="color:var(--rosa-texto)">' + icone('info') + '</span>' +
         '<span>A Roda Cuidado não é atendimento de emergência. Em um momento de crise, ligue 188 (CVV), gratuito e 24 horas.</span></div></div>' +
       '<div class="espaco"></div>' + acao + navApp('cuidado')
     );
@@ -714,7 +714,7 @@
     var energia = rotulo('energia', resposta('energia')[0]);
 
     return tela(
-      '<div class="topo">' + btnVoltar('#/inicio', 'Voltar ao início') + '<span></span></div>' +
+      '<div class="topo">' + btnVoltar('#/inicio', 'Voltar ao início') + (window.RodaTema ? RodaTema.botao() : '<span></span>') + '</div>' +
       '<div class="perfil-cabecalho"><span class="avatar avatar-voce">' + esc(primeiroNome().charAt(0).toUpperCase()) + '</span>' +
         '<div><h1 class="titulo" style="margin:0">' + esc(primeiroNome()) + '</h1>' +
         '<p class="texto-apoio" style="margin-top:4px">' + info.bairro + (energia ? ', ' + energia.toLowerCase() : '') + '</p></div></div>' +
@@ -730,7 +730,7 @@
         '</div></div></div>' +
       '<div class="espaco"></div>' +
       '<button class="btn btn-contorno btn-bloco" type="button" data-acao="refazerQuiz">Refazer quiz de ritmo</button>' +
-      '<button class="btn btn-texto btn-bloco" type="button" data-acao="apagarDados" style="margin-top:6px;color:var(--rosa-claro)">Apagar meus dados deste aparelho</button>' +
+      '<button class="btn btn-texto btn-bloco" type="button" data-acao="apagarDados" style="margin-top:6px;color:var(--rosa-claro-texto)">Apagar meus dados deste aparelho</button>' +
       navApp('perfil')
     );
   }

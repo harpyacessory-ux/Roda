@@ -55,7 +55,7 @@ body.app {
   font-weight: 800;
   font-size: 20px;
   letter-spacing: -0.02em;
-  color: var(--lima);
+  color: var(--lima-texto);
   text-shadow: 0 0 14px rgba(200, 255, 62, 0.55);
 }
 
@@ -76,7 +76,7 @@ body.app {
 }
 
 .btn-icone:hover {
-  color: var(--lima);
+  color: var(--lima-texto);
   border-color: var(--linha-forte);
 }
 
@@ -95,17 +95,17 @@ body.app {
 
 .avatar-voce {
   background: var(--rosa);
-  color: var(--noite);
+  color: var(--sobre-acento);
   box-shadow: 0 0 14px rgba(255, 79, 203, 0.55);
 }
 
 .avatar-voce:hover {
-  color: var(--noite);
+  color: var(--sobre-acento);
 }
 
 .avatar-outro {
-  border: 1.5px solid var(--lima);
-  color: var(--lima);
+  border: 1.5px solid var(--lima-traco);
+  color: var(--lima-texto);
   box-shadow: 0 0 10px rgba(200, 255, 62, 0.25);
 }
 
@@ -139,7 +139,7 @@ body.app {
   margin: 24px 0 0;
   font-size: 13px;
   font-weight: 800;
-  color: var(--rosa);
+  color: var(--rosa-texto);
 }
 
 .sobretitulo + .titulo {
@@ -170,7 +170,7 @@ body.app {
 }
 
 .destaque-lima {
-  color: var(--lima);
+  color: var(--lima-texto);
   text-shadow: 0 0 18px rgba(200, 255, 62, 0.6);
 }
 
@@ -212,7 +212,7 @@ body.app {
 .numeros strong {
   font-family: var(--fonte-titulo);
   font-size: 22px;
-  color: var(--lima);
+  color: var(--lima-texto);
   text-shadow: 0 0 12px rgba(200, 255, 62, 0.5);
 }
 
@@ -260,7 +260,7 @@ body.app {
 .contador {
   font-weight: 800;
   font-size: 14px;
-  color: var(--lima);
+  color: var(--lima-texto);
   font-variant-numeric: tabular-nums;
   min-width: 44px;
   text-align: right;
@@ -293,7 +293,7 @@ body.app {
 }
 
 .opcao[aria-pressed="true"] {
-  border: 1.5px solid var(--lima);
+  border: 1.5px solid var(--lima-traco);
   background: rgba(200, 255, 62, 0.08);
   box-shadow: 0 0 18px rgba(200, 255, 62, 0.28), inset 0 0 12px rgba(200, 255, 62, 0.08);
 }
@@ -327,9 +327,9 @@ body.app {
 }
 
 .opcao[aria-pressed="true"] .marcador {
-  border-color: var(--lima);
+  border-color: var(--lima-traco);
   background: var(--lima);
-  color: var(--noite);
+  color: var(--sobre-acento);
   box-shadow: 0 0 10px rgba(200, 255, 62, 0.7);
 }
 
@@ -358,7 +358,7 @@ body.app {
 
 .campo input:focus {
   outline: none;
-  border-color: var(--lima);
+  border-color: var(--lima-traco);
   box-shadow: 0 0 18px rgba(200, 255, 62, 0.28);
 }
 
@@ -373,13 +373,13 @@ body.app {
 
 .card-neon {
   border: 0;
-  background: #10150e;
+  background: var(--superficie-funda);
   box-shadow: 0 0 0 1px rgba(200, 255, 62, 0.7), 0 0 24px rgba(200, 255, 62, 0.18);
 }
 
 .card-rosa {
   border: 0;
-  background: #160f15;
+  background: var(--superficie-rosa);
   box-shadow: 0 0 0 1px rgba(255, 79, 203, 0.6), 0 0 24px rgba(255, 79, 203, 0.18);
 }
 
@@ -394,7 +394,7 @@ body.app {
   gap: 12px;
   font-size: 13px;
   line-height: 1.5;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .linha-info svg {
@@ -533,7 +533,7 @@ body.app {
 }
 
 .anel-centro strong span {
-  color: #6e7b68;
+  color: var(--apagado);
   font-weight: 500;
 }
 
@@ -602,7 +602,7 @@ body.app {
 .local-texto small {
   font-size: 12px;
   font-weight: 800;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .local-texto strong {
@@ -632,7 +632,7 @@ body.app {
 }
 
 .encontros li + li {
-  border-top: 1px solid #232c1f;
+  border-top: 1px solid var(--superficie-3);
 }
 
 .num {
@@ -652,13 +652,13 @@ body.app {
 .num-feito {
   border: 0;
   background: var(--lima);
-  color: var(--noite);
+  color: var(--sobre-acento);
   box-shadow: 0 0 12px rgba(200, 255, 62, 0.55);
 }
 
 .num-proximo {
   border: 2px solid var(--rosa);
-  color: var(--rosa);
+  color: var(--rosa-texto);
   box-shadow: 0 0 12px rgba(255, 79, 203, 0.5);
 }
 
@@ -695,19 +695,19 @@ body.app {
 
 .etiqueta-lima {
   border-color: rgba(200, 255, 62, 0.5);
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .etiqueta-feito {
   border-color: rgba(200, 255, 62, 0.4);
   background: rgba(200, 255, 62, 0.1);
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .etiqueta-rosa {
   border-color: var(--rosa);
   background: var(--rosa);
-  color: var(--noite);
+  color: var(--sobre-acento);
   box-shadow: 0 0 10px rgba(255, 79, 203, 0.55);
 }
 
@@ -721,7 +721,7 @@ body.app {
   border-radius: var(--raio-pilula);
   font-size: 12px;
   font-weight: 800;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .ponto {
@@ -739,7 +739,7 @@ body.app {
   margin-top: 22px;
   padding: 24px;
   border-radius: 24px;
-  background: #10150e;
+  background: var(--superficie-funda);
   animation: cartaBrilho 3.4s ease-in-out infinite;
   box-shadow: 0 0 0 1px var(--lima), 0 0 30px rgba(200, 255, 62, 0.25);
 }
@@ -755,7 +755,7 @@ body.app {
   justify-content: space-between;
   font-size: 13px;
   font-weight: 800;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .carta-topo img {
@@ -767,7 +767,7 @@ body.app {
   margin-top: auto;
   font-size: 14px;
   font-weight: 800;
-  color: var(--rosa);
+  color: var(--rosa-texto);
   text-shadow: 0 0 12px rgba(255, 79, 203, 0.5);
 }
 
@@ -786,7 +786,7 @@ body.app {
   gap: 8px;
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px solid #26311f;
+  border-top: 1px solid var(--linha);
   font-size: 13px;
   color: var(--apoio);
 }
@@ -840,7 +840,7 @@ body.app {
 
 .escolha .avatar {
   border: 1.5px solid var(--rosa);
-  color: var(--rosa);
+  color: var(--rosa-texto);
 }
 
 .escolha[aria-pressed="true"] {
@@ -851,7 +851,7 @@ body.app {
 
 .escolha[aria-pressed="true"] .avatar {
   background: var(--rosa);
-  color: var(--noite);
+  color: var(--sobre-acento);
 }
 
 .coracao {
@@ -863,13 +863,13 @@ body.app {
   flex-shrink: 0;
   border-radius: 50%;
   border: 1.5px solid var(--linha-forte);
-  color: #6e7b68;
+  color: var(--apagado);
 }
 
 .escolha[aria-pressed="true"] .coracao {
   border-color: var(--rosa);
   background: var(--rosa);
-  color: var(--noite);
+  color: var(--sobre-acento);
   box-shadow: 0 0 10px rgba(255, 79, 203, 0.7);
 }
 
@@ -912,12 +912,12 @@ body.app {
 }
 
 .lista-matches li + li {
-  border-top: 1px solid #232c1f;
+  border-top: 1px solid var(--superficie-3);
 }
 
 .lista-matches .avatar {
   background: var(--rosa);
-  color: var(--noite);
+  color: var(--sobre-acento);
   box-shadow: 0 0 12px rgba(255, 79, 203, 0.55);
 }
 
@@ -929,7 +929,7 @@ body.app {
   margin-top: 20px;
   padding: 18px;
   border-radius: var(--raio-card);
-  background: #10150e;
+  background: var(--superficie-funda);
   color: var(--texto);
   text-decoration: none;
   box-shadow: 0 0 0 1px rgba(200, 255, 62, 0.7), 0 0 24px rgba(200, 255, 62, 0.18);
@@ -957,7 +957,7 @@ body.app {
 .cartao-roda-texto small {
   font-size: 12px;
   font-weight: 800;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .cartao-roda-texto strong {
@@ -994,7 +994,7 @@ body.app {
 .salas-cabecalho .contagem {
   font-size: 12px;
   font-weight: 800;
-  color: var(--rosa);
+  color: var(--rosa-texto);
   white-space: nowrap;
 }
 
@@ -1024,9 +1024,9 @@ body.app {
 }
 
 .filtro[aria-pressed="true"] {
-  border-color: var(--lima);
+  border-color: var(--lima-traco);
   background: var(--lima);
-  color: var(--noite);
+  color: var(--sobre-acento);
   box-shadow: 0 0 16px rgba(200, 255, 62, 0.5);
 }
 
@@ -1085,7 +1085,7 @@ body.app {
   gap: 6px;
   margin-top: 6px;
   font-size: 13px;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .sala-rodape {
@@ -1095,7 +1095,7 @@ body.app {
   gap: 12px;
   margin-top: 14px;
   padding-top: 14px;
-  border-top: 1px solid #232c1f;
+  border-top: 1px solid var(--superficie-3);
 }
 
 .vagas {
@@ -1135,7 +1135,7 @@ body.app {
 }
 
 .vagas small.sua {
-  color: var(--rosa);
+  color: var(--rosa-texto);
 }
 
 .btn-pequeno {
@@ -1148,12 +1148,12 @@ body.app {
 .btn-reservado {
   border: 1.5px solid var(--rosa);
   background: rgba(255, 79, 203, 0.1);
-  color: var(--rosa);
+  color: var(--rosa-texto);
   box-shadow: 0 0 14px rgba(255, 79, 203, 0.35);
 }
 
 .btn-reservado:hover {
-  color: var(--rosa-claro);
+  color: var(--rosa-claro-texto);
 }
 
 .ao-vivo {
@@ -1176,7 +1176,7 @@ body.app {
   margin-top: 24px;
   padding: 18px;
   border-radius: var(--raio-card);
-  background: #160f15;
+  background: var(--superficie-rosa);
   color: var(--texto);
   text-decoration: none;
   box-shadow: 0 0 0 1px rgba(255, 79, 203, 0.6), 0 0 24px rgba(255, 79, 203, 0.18);
@@ -1192,7 +1192,7 @@ body.app {
   justify-content: space-between;
   font-size: 13px;
   font-weight: 800;
-  color: var(--rosa);
+  color: var(--rosa-texto);
 }
 
 .cartao-cuidado strong {
@@ -1202,7 +1202,7 @@ body.app {
 
 .cartao-cuidado span.desc {
   font-size: 13px;
-  color: #c9b3c2;
+  color: var(--texto-rosa-suave);
 }
 
 /* Navegação inferior */
@@ -1215,7 +1215,7 @@ body.app {
   padding: 8px;
   border: 1px solid var(--linha);
   border-radius: var(--raio-pilula);
-  background: rgba(20, 26, 18, 0.92);
+  background: var(--fundo-nav);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 5;
@@ -1240,7 +1240,7 @@ body.app {
 
 .nav-app a[aria-current="page"] {
   background: var(--lima);
-  color: var(--noite);
+  color: var(--sobre-acento);
   font-weight: 800;
   box-shadow: 0 0 16px rgba(200, 255, 62, 0.5);
 }
@@ -1253,7 +1253,7 @@ body.app {
   margin-top: 22px;
   padding: 20px;
   border-radius: var(--raio-card);
-  background: #160f15;
+  background: var(--superficie-rosa);
   box-shadow: 0 0 0 1px var(--rosa), 0 0 30px rgba(255, 79, 203, 0.3), inset 0 0 30px rgba(255, 79, 203, 0.08);
 }
 
@@ -1261,7 +1261,7 @@ body.app {
   display: block;
   font-size: 13px;
   font-weight: 800;
-  color: var(--rosa-claro);
+  color: var(--rosa-claro-texto);
 }
 
 .preco strong {
@@ -1276,7 +1276,7 @@ body.app {
 
 .preco span {
   font-size: 14px;
-  color: #c9b3c2;
+  color: var(--texto-rosa-suave);
 }
 
 .beneficios {
@@ -1335,7 +1335,7 @@ body.app {
   padding: 14px 16px 16px;
   font-size: 13px;
   line-height: 1.5;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .kit strong {
@@ -1346,7 +1346,7 @@ body.app {
 
 .kit .kit-para {
   font-weight: 800;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .icone-quadro {
@@ -1357,8 +1357,8 @@ body.app {
   height: 40px;
   flex-shrink: 0;
   border-radius: 12px;
-  border: 1.5px solid var(--lima);
-  color: var(--lima);
+  border: 1.5px solid var(--lima-traco);
+  color: var(--lima-texto);
   box-shadow: 0 0 12px rgba(200, 255, 62, 0.3);
 }
 
@@ -1388,14 +1388,14 @@ body.app {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .ativo-caixa span {
   display: block;
   margin-top: 4px;
   font-size: 13px;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 /* Perfil */
@@ -1452,7 +1452,7 @@ body.app {
   text-align: center;
   border-radius: var(--raio-pilula);
   background: var(--texto);
-  color: var(--noite);
+  color: var(--sobre-acento);
   font-size: 14px;
   font-weight: 800;
   opacity: 0;

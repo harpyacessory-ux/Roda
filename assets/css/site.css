@@ -18,14 +18,14 @@ html {
   padding: 10px 16px;
   border-radius: var(--raio-pilula);
   background: var(--lima);
-  color: var(--noite);
+  color: var(--sobre-acento);
   font-weight: 800;
   text-decoration: none;
 }
 
 .pular:focus {
   top: 12px;
-  color: var(--noite);
+  color: var(--sobre-acento);
 }
 
 /* Cabeçalho */
@@ -33,10 +33,10 @@ html {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(10, 13, 9, 0.82);
+  background: var(--fundo-cabecalho);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(43, 54, 39, 0.6);
+  border-bottom: 1px solid var(--linha);
 }
 
 .cabecalho .envoltorio {
@@ -64,7 +64,7 @@ html {
   font-weight: 800;
   font-size: 22px;
   letter-spacing: -0.02em;
-  color: var(--lima);
+  color: var(--lima-texto);
   text-shadow: 0 0 14px rgba(200, 255, 62, 0.55);
 }
 
@@ -127,7 +127,7 @@ html {
 
 .hero h1 .linha-2 {
   display: block;
-  color: var(--lima);
+  color: var(--lima-texto);
   text-shadow: 0 0 28px rgba(200, 255, 62, 0.5);
 }
 
@@ -136,7 +136,7 @@ html {
   margin: 28px 0 0;
   font-size: 19px;
   line-height: 1.55;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .hero-acoes {
@@ -254,7 +254,7 @@ html {
 /* Seções */
 .secao {
   padding: 112px 0;
-  border-top: 1px solid rgba(43, 54, 39, 0.6);
+  border-top: 1px solid var(--linha);
 }
 
 .secao h2 {
@@ -273,7 +273,7 @@ html {
   margin: 20px 0 0;
   font-size: 18px;
   line-height: 1.6;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 /* Problema */
@@ -290,7 +290,7 @@ html {
   font-size: clamp(64px, 11vw, 148px);
   line-height: 0.9;
   letter-spacing: -0.05em;
-  color: var(--rosa);
+  color: var(--rosa-texto);
   text-shadow: 0 0 40px rgba(255, 79, 203, 0.45);
 }
 
@@ -305,7 +305,7 @@ html {
   margin: 0;
   padding: 28px;
   border-left: 3px solid var(--rosa);
-  background: #160f15;
+  background: var(--superficie-rosa);
   border-radius: 0 20px 20px 0;
 }
 
@@ -358,8 +358,8 @@ html {
   height: 34px;
   border-radius: 50%;
   background: var(--noite);
-  border: 2px solid var(--lima);
-  color: var(--lima);
+  border: 2px solid var(--lima-traco);
+  color: var(--lima-texto);
   font-family: var(--fonte-titulo);
   font-size: 14px;
   font-weight: 700;
@@ -398,7 +398,7 @@ html {
 
 .coluna-roda {
   border: 0;
-  background: #10150e;
+  background: var(--superficie-funda);
   box-shadow: 0 0 0 1.5px var(--lima), 0 0 40px rgba(200, 255, 62, 0.18);
 }
 
@@ -410,7 +410,7 @@ html {
 }
 
 .coluna-roda h3 {
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .coluna ul {
@@ -425,11 +425,11 @@ html {
   padding: 12px 0;
   font-size: 16px;
   line-height: 1.5;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .coluna li + li {
-  border-top: 1px solid #232c1f;
+  border-top: 1px solid var(--superficie-3);
 }
 
 .coluna li svg {
@@ -438,11 +438,11 @@ html {
 }
 
 .coluna-padrao li svg {
-  color: #6e7b68;
+  color: var(--apagado);
 }
 
 .coluna-roda li svg {
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 /* Salas */
@@ -466,18 +466,18 @@ html {
 .sala-exemplo:first-child {
   grid-row: span 2;
   border: 0;
-  background: #160f15;
+  background: var(--superficie-rosa);
   box-shadow: 0 0 0 1.5px var(--rosa), 0 0 40px rgba(255, 79, 203, 0.2);
 }
 
 .sala-exemplo small {
   font-size: 14px;
   font-weight: 800;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .sala-exemplo:first-child small {
-  color: var(--rosa);
+  color: var(--rosa-texto);
 }
 
 .sala-exemplo h3 {
@@ -538,7 +538,7 @@ html {
 
 .plano-cuidado {
   border: 0;
-  background: #160f15;
+  background: var(--superficie-rosa);
   box-shadow: 0 0 0 1.5px var(--rosa), 0 0 40px rgba(255, 79, 203, 0.2);
 }
 
@@ -574,7 +574,7 @@ html {
   margin: 14px 0 0;
   font-size: 16px;
   line-height: 1.55;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .plano ul {
@@ -594,11 +594,11 @@ html {
 .plano li svg {
   flex-shrink: 0;
   margin-top: 2px;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .plano-cuidado li svg {
-  color: var(--rosa);
+  color: var(--rosa-texto);
 }
 
 .plano .btn {
@@ -609,7 +609,7 @@ html {
   margin: 16px 0 0;
   font-size: 13px;
   line-height: 1.5;
-  color: #c9b3c2;
+  color: var(--texto-rosa-suave);
 }
 
 .parceiros {
@@ -668,7 +668,7 @@ html {
 .rede-papel {
   font-size: 13px;
   font-weight: 800;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .rede-fluxo strong {
@@ -680,7 +680,7 @@ html {
 .rede-fluxo li > span:last-child {
   font-size: 15px;
   line-height: 1.55;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .galeria {
@@ -737,7 +737,7 @@ html {
 .combinados svg {
   flex-shrink: 0;
   margin-top: 2px;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 #rede .parceiros,
@@ -771,7 +771,7 @@ html {
 }
 
 .seguranca svg {
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .seguranca strong {
@@ -789,7 +789,7 @@ html {
 .final {
   padding: 120px 0;
   text-align: center;
-  border-top: 1px solid rgba(43, 54, 39, 0.6);
+  border-top: 1px solid var(--linha);
   background: radial-gradient(circle at 50% 100%, rgba(200, 255, 62, 0.12), rgba(200, 255, 62, 0) 55%);
 }
 
@@ -813,7 +813,7 @@ html {
   margin: 20px auto 0;
   max-width: 32em;
   font-size: 18px;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .final .btn {
@@ -826,7 +826,7 @@ html {
 /* Rodapé */
 .rodape {
   padding: 48px 0;
-  border-top: 1px solid rgba(43, 54, 39, 0.6);
+  border-top: 1px solid var(--linha);
 }
 
 .rodape .envoltorio {
@@ -874,7 +874,7 @@ html {
   margin: 0 0 18px;
   font-size: 14px;
   font-weight: 800;
-  color: var(--rosa);
+  color: var(--rosa-texto);
 }
 
 .kit-capa {
@@ -926,14 +926,14 @@ html {
   margin: 6px 0 0;
   font-size: 14px;
   font-weight: 800;
-  color: var(--lima);
+  color: var(--lima-texto);
 }
 
 .kit-corpo p:last-child {
   margin: 12px 0 0;
   font-size: 15px;
   line-height: 1.55;
-  color: #c9d3c2;
+  color: var(--texto-suave);
 }
 
 .kit-aviso {
