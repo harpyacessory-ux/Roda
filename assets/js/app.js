@@ -637,7 +637,7 @@
       '<p class="nota" style="text-align:left">Ingresso e consumo são pagos direto no local. Encontros sempre em espaços públicos parceiros.</p>' +
       '<a class="cartao-cuidado" href="#/cuidado"><span class="cartao-cuidado-topo"><span>Roda Cuidado</span><span>R$ 59,90/mês</span></span>' +
         '<strong>Apoio para se conectar melhor</strong>' +
-        '<span class="desc">Psicólogo, acompanhamento na plataforma e métodos para destravar a conversa.</span></a>' +
+        '<span class="desc">Psicólogos de ONGs parceiras, acompanhamento na plataforma e um kit de cuidado todo mês.</span></a>' +
       '<div class="espaco"></div>' + navApp('inicio')
     );
   }
@@ -651,11 +651,18 @@
 
   function telaCuidado() {
     var beneficios = [
-      ['conversa', 'Sessões com psicólogo', 'Atendimento online com psicólogos registrados no CRP.'],
+      ['conversa', 'Sessões com psicólogo', 'Atendimento online com psicólogos de ONGs parceiras, registrados no CRP.'],
       ['grafico', 'Acompanhamento na plataforma', 'Suas rodas, presenças e metas de conexão, revisadas com o profissional.'],
       ['balao', 'Métodos para se comunicar', 'Exercícios guiados, roteiros para puxar conversa e desafios para levar aos encontros.'],
       ['presente', 'Kit de cuidado todo mês', 'Uma esfera na sua porta com itens escolhidos para o seu momento, junto com o psicólogo.'],
-      ['escudoMais', 'Encaminhamento médico, se indicado', 'Quando houver necessidade de medicação, a avaliação e a receita ficam com um psiquiatra.']
+      ['escudoMais', 'Encaminhamento pela ONG, se indicado', 'Quando houver necessidade de medicação, a ONG encaminha para um psiquiatra, que faz a avaliação e a receita.']
+    ].map(function (b) {
+      return '<li><span class="icone-quadro">' + icone(b[0]) + '</span><div><strong>' + b[1] + '</strong><span>' + b[2] + '</span></div></li>';
+    }).join('');
+
+    var rede = [
+      ['coracao', 'ONGs parceiras', 'Oferecem o atendimento com psicólogos e fazem os encaminhamentos. O app divulga o trabalho delas.'],
+      ['estrela', 'Apoiadores', 'Laboratórios, convênios de saúde e investidores financiam o app e as ONGs.']
     ].map(function (b) {
       return '<li><span class="icone-quadro">' + icone(b[0]) + '</span><div><strong>' + b[1] + '</strong><span>' + b[2] + '</span></div></li>';
     }).join('');
@@ -667,7 +674,7 @@
 
     var acao = estado.assinante
       ? '<div class="ativo-caixa"><strong>' + icone('check', 18, 3) + ' Assinatura ativa</strong>' +
-        '<span>O próximo passo é uma triagem rápida para escolher seu psicólogo.</span></div>' +
+        '<span>O próximo passo é uma triagem rápida para escolher a ONG e o psicólogo que vão te acompanhar.</span></div>' +
         '<button class="btn btn-texto btn-bloco" type="button" data-acao="cancelarAssinatura" style="margin-top:6px">Cancelar assinatura</button>'
       : '<button class="btn btn-rosa btn-bloco" type="button" data-acao="assinar">Assinar por R$ 59,90/mês</button>' +
         '<p class="nota">Versão de teste: o pagamento ainda não está integrado.</p>';
@@ -684,6 +691,9 @@
       '<p class="texto-apoio" style="margin-top:4px">Deslize para conhecer. O kit é definido na triagem e pode mudar a cada mês.</p>' +
       '<ul class="kits" aria-label="Kits de cuidado">' + kits + '</ul>' +
       '<p class="nota" style="text-align:left">Os kits apoiam o acompanhamento e não substituem tratamento. Fitoterápicos só entram com indicação do profissional. Imagens ilustrativas.</p>' +
+      '<h2 class="secao-titulo" style="font-size:15px;margin-top:28px">Quem faz a rede</h2>' +
+      '<ul class="beneficios">' + rede + '</ul>' +
+      '<p class="nota" style="text-align:left">Apoiadores não têm acesso aos seus dados nem indicam tratamento ou remédio. Essa decisão é sempre do profissional.</p>' +
       '<div class="card card-tracejado"><div class="linha-info"><span style="color:var(--rosa)">' + icone('info') + '</span>' +
         '<span>A Roda Cuidado não é atendimento de emergência. Em um momento de crise, ligue 188 (CVV), gratuito e 24 horas.</span></div></div>' +
       '<div class="espaco"></div>' + acao + navApp('cuidado')
