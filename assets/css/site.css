@@ -712,11 +712,17 @@ html {
   color: var(--lima);
 }
 
-#rede .parceiros {
+#rede .parceiros,
+#empresas .parceiros {
   margin-top: 40px;
 }
 
-#rede .parceiros .btn {
+#rede .parceiros {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+#rede .parceiros .btn,
+#empresas .parceiros .btn {
   margin-top: 20px;
 }
 
@@ -967,7 +973,8 @@ html {
   }
 
   .rede-fluxo,
-  .combinados {
+  .combinados,
+  #rede .parceiros {
     grid-template-columns: minmax(0, 1fr);
   }
 }

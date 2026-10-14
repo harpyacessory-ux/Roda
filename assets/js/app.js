@@ -23,7 +23,8 @@
       reservas: [],
       fila: [],
       filtro: 'pravoce',
-      assinante: false
+      assinante: false,
+      solidaria: false
     };
   }
 
@@ -662,7 +663,8 @@
 
     var rede = [
       ['coracao', 'ONGs parceiras', 'Oferecem o atendimento com psicólogos e fazem os encaminhamentos. O app divulga o trabalho delas.'],
-      ['estrela', 'Apoiadores', 'Laboratórios, convênios de saúde e investidores financiam o app e as ONGs.']
+      ['estrela', 'Quem financia', 'Empresas e convênios oferecem a Roda como benefício, marcas entram no kit e laboratórios e investidores apoiam as ONGs.'],
+      ['pessoas', 'Assinatura solidária', 'Quem pode doa uma assinatura para alguém indicado por uma ONG parceira.']
     ].map(function (b) {
       return '<li><span class="icone-quadro">' + icone(b[0]) + '</span><div><strong>' + b[1] + '</strong><span>' + b[2] + '</span></div></li>';
     }).join('');
@@ -674,9 +676,13 @@
 
     var acao = estado.assinante
       ? '<div class="ativo-caixa"><strong>' + icone('check', 18, 3) + ' Assinatura ativa</strong>' +
-        '<span>O próximo passo é uma triagem rápida para escolher a ONG e o psicólogo que vão te acompanhar.</span></div>' +
+        '<span>O próximo passo é uma triagem rápida para escolher a ONG e o psicólogo que vão te acompanhar.' +
+        (estado.solidaria ? ' Você também doa uma assinatura para alguém indicado por uma ONG.' : '') + '</span></div>' +
         '<button class="btn btn-texto btn-bloco" type="button" data-acao="cancelarAssinatura" style="margin-top:6px">Cancelar assinatura</button>'
-      : '<button class="btn btn-rosa btn-bloco" type="button" data-acao="assinar">Assinar por R$ 59,90/mês</button>' +
+      : '<button class="opcao" type="button" data-acao="alternarSolidaria" aria-pressed="' + estado.solidaria + '" style="margin-bottom:12px">' +
+          '<span class="opcao-texto"><strong>Assinatura solidária</strong><small>Pague também a assinatura de alguém indicado por uma ONG (+R$ 59,90/mês)</small></span>' +
+          '<span class="marcador">' + icone('check', 14, 3.2) + '</span></button>' +
+        '<button class="btn btn-rosa btn-bloco" type="button" data-acao="assinar">Assinar por ' + (estado.solidaria ? 'R$ 119,80' : 'R$ 59,90') + '/mês</button>' +
         '<p class="nota">Versão de teste: o pagamento ainda não está integrado.</p>';
 
     return tela(
@@ -831,8 +837,11 @@
       atualizar({ assinante: true });
       avisar('Assinatura ativada.');
     },
+    alternarSolidaria: function () {
+      atualizar({ solidaria: !estado.solidaria });
+    },
     cancelarAssinatura: function () {
-      atualizar({ assinante: false });
+      atualizar({ assinante: false, solidaria: false });
       avisar('Assinatura cancelada.');
     },
     presencaMais: function () {
