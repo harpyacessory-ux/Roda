@@ -683,6 +683,34 @@ html {
   color: #c9d3c2;
 }
 
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.galeria figure {
+  margin: 0;
+}
+
+.galeria img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.galeria figcaption {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--apoio);
+}
+
 .rede-subtitulo {
   margin: 48px 0 0;
   font-family: var(--fonte-titulo);
@@ -974,6 +1002,7 @@ html {
 
   .rede-fluxo,
   .combinados,
+  .galeria,
   #rede .parceiros {
     grid-template-columns: minmax(0, 1fr);
   }
