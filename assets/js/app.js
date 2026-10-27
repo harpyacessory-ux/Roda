@@ -28,13 +28,28 @@
     };
   }
 
+  // Dados salvos de versões antigas ou corrompidos não podem travar o app:
+  // cada campo só é aproveitado se tiver o mesmo tipo do padrão
   function carregar() {
+    var limpo = estadoPadrao();
+    var salvo;
     try {
-      var salvo = JSON.parse(localStorage.getItem(CHAVE));
-      return Object.assign(estadoPadrao(), salvo || {});
+      salvo = JSON.parse(localStorage.getItem(CHAVE));
     } catch (e) {
-      return estadoPadrao();
+      return limpo;
     }
+    if (!salvo || typeof salvo !== 'object') return limpo;
+    Object.keys(limpo).forEach(function (k) {
+      var v = salvo[k];
+      var padrao = limpo[k];
+      var valido = Array.isArray(padrao) ? Array.isArray(v)
+        : k === 'inicio' ? typeof v === 'string' && !isNaN(Date.parse(v))
+        : v !== null && typeof v === typeof padrao;
+      if (valido) limpo[k] = v;
+    });
+    limpo.presencas = Math.max(0, Math.min(4, Math.floor(limpo.presencas)));
+    limpo.carta = Math.max(0, Math.floor(limpo.carta));
+    return limpo;
   }
 
   var estado = carregar();
@@ -232,6 +247,7 @@
 
   function proximoDia(diaSemana, aPartirDe) {
     var d = new Date(aPartirDe);
+    if (isNaN(d)) d = new Date(); // data inválida faria o laço abaixo nunca terminar
     d.setHours(12, 0, 0, 0);
     d.setDate(d.getDate() + 1);
     while (d.getDay() !== diaSemana) d.setDate(d.getDate() + 1);
@@ -248,6 +264,20 @@
     var local = LOCAIS[resposta('local')[0]] || 'Café parceiro';
     var base = estado.inicio ? new Date(estado.inicio) : new Date();
     var primeira = proximoDia(h.dia, base);
+    // Se o próximo encontro já passou sem presença registrada, a agenda anda junto:
+    // ele vira o próximo dia da roda a partir de hoje, e os seguintes continuam semanais
+    if (estado.presencas < 4) {
+      var proximo = new Date(primeira);
+      proximo.setDate(proximo.getDate() + estado.presencas * 7);
+      var hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+      if (proximo < hoje) {
+        var ontem = new Date();
+        ontem.setDate(ontem.getDate() - 1);
+        primeira = proximoDia(h.dia, ontem);
+        primeira.setDate(primeira.getDate() - estado.presencas * 7);
+      }
+    }
     var encontros = TEMAS.map(function (tema, i) {
       var d = new Date(primeira);
       d.setDate(d.getDate() + i * 7);
@@ -707,8 +737,8 @@
   }
 
   function telaPerfil() {
-    var interesses = resposta('interesses').map(function (id) {
-      return '<span class="etiqueta etiqueta-lima">' + rotulo('interesses', id) + '</span>';
+    var interesses = resposta('interesses').map(function (id) { return rotulo('interesses', id); }).filter(Boolean).map(function (r) {
+      return '<span class="etiqueta etiqueta-lima">' + r + '</span>';
     }).join('') || '<span class="texto-apoio" style="margin:0">Nenhum interesse escolhido</span>';
     var info = infoRoda();
     var energia = rotulo('energia', resposta('energia')[0]);
@@ -756,7 +786,7 @@
       conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">Coloque a Roda na tela inicial e abra como um app, até sem internet.</p>' +
         '<button class="btn btn-lima btn-bloco" type="button" data-acao="instalarApp" style="margin-top:12px">Instalar o app</button>';
     } else if (ehIphone()) {
-      conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">No Safari, toque em <strong>Compartilhar</strong> (o quadrado com a seta para cima) e depois em <strong>Adicionar à Tela de Início</strong>.</p>';
+      conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">Toque em <strong>Compartilhar</strong> (o quadrado com a seta para cima) e depois em <strong>Adicionar à Tela de Início</strong>.</p>';
     } else {
       conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">No Chrome, abra o menu <strong>⋮</strong> e toque em <strong>Instalar app</strong> ou <strong>Adicionar à tela inicial</strong>.</p>';
     }
@@ -766,13 +796,14 @@
   window.addEventListener('beforeinstallprompt', function (evento) {
     evento.preventDefault();
     pedidoInstalacao = evento;
-    render();
+    // Só redesenha no Perfil, onde fica o botão; em outra tela, redesenhar tiraria o foco de quem está digitando
+    if (rotaAtual() === 'perfil') render();
   });
 
   window.addEventListener('appinstalled', function () {
     pedidoInstalacao = null;
     avisar('App instalado na tela inicial.');
-    render();
+    if (rotaAtual() === 'perfil') render();
   });
 
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
@@ -954,9 +985,14 @@
     perfil: { tela: telaPerfil, titulo: 'Perfil' }
   };
 
+  function rotaAtual() {
+    return location.hash.replace(/^#\/?/, '');
+  }
+
   function render() {
-    var nome = location.hash.replace(/^#\/?/, '');
-    var rota = ROTAS[nome];
+    var nome = rotaAtual();
+    // hasOwnProperty evita que endereços como #/toString caiam em funções internas do JavaScript
+    var rota = Object.prototype.hasOwnProperty.call(ROTAS, nome) ? ROTAS[nome] : null;
 
     if (!rota) {
       ir(estado.onboarded ? '#/inicio' : '#/');
