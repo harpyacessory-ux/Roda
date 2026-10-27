@@ -728,6 +728,7 @@
           '<output aria-live="polite">' + estado.presencas + '</output>' +
           '<button class="btn-icone" type="button" data-acao="presencaMais" aria-label="Aumentar presenças">' + icone('mais') + '</button>' +
         '</div></div></div>' +
+      cartaoInstalar() +
       '<div class="espaco"></div>' +
       '<button class="btn btn-contorno btn-bloco" type="button" data-acao="refazerQuiz">Refazer quiz de ritmo</button>' +
       '<button class="btn btn-texto btn-bloco" type="button" data-acao="apagarDados" style="margin-top:6px;color:var(--rosa-claro-texto)">Apagar meus dados deste aparelho</button>' +
@@ -735,9 +736,61 @@
     );
   }
 
+  /* ---------- Instalar na tela inicial ---------- */
+
+  var pedidoInstalacao = null;
+
+  function appInstalado() {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  }
+
+  function ehIphone() {
+    var ua = navigator.userAgent;
+    return /iphone|ipad|ipod/i.test(ua) || (/Macintosh/.test(ua) && 'ontouchend' in document);
+  }
+
+  function cartaoInstalar() {
+    if (appInstalado()) return '';
+    var conteudo;
+    if (pedidoInstalacao) {
+      conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">Coloque a Roda na tela inicial e abra como um app, até sem internet.</p>' +
+        '<button class="btn btn-lima btn-bloco" type="button" data-acao="instalarApp" style="margin-top:12px">Instalar o app</button>';
+    } else if (ehIphone()) {
+      conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">No Safari, toque em <strong>Compartilhar</strong> (o quadrado com a seta para cima) e depois em <strong>Adicionar à Tela de Início</strong>.</p>';
+    } else {
+      conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">No Chrome, abra o menu <strong>⋮</strong> e toque em <strong>Instalar app</strong> ou <strong>Adicionar à tela inicial</strong>.</p>';
+    }
+    return '<div class="card card-neon"><strong style="font-size:15px">Instalar o app</strong>' + conteudo + '</div>';
+  }
+
+  window.addEventListener('beforeinstallprompt', function (evento) {
+    evento.preventDefault();
+    pedidoInstalacao = evento;
+    render();
+  });
+
+  window.addEventListener('appinstalled', function () {
+    pedidoInstalacao = null;
+    avisar('App instalado na tela inicial.');
+    render();
+  });
+
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () { /* segue funcionando sem modo offline */ });
+    });
+  }
+
   /* ---------- Ações ---------- */
 
   var ACOES = {
+    instalarApp: function () {
+      if (!pedidoInstalacao) return;
+      var pedido = pedidoInstalacao;
+      pedidoInstalacao = null;
+      pedido.prompt();
+      pedido.userChoice.then(function () { render(); });
+    },
     comecarQuiz: function () {
       passoQuiz = 0;
       ir('#/quiz');
