@@ -142,9 +142,13 @@
     },
     {
       id: 'regiao', tema: 'Bairro',
-      pergunta: 'Em que região você prefere encontrar a galera?',
+      pergunta: 'Em que parte de Santos você prefere encontrar a galera?',
       dica: 'Mostramos locais parceiros perto de você.',
-      opcoes: [['centro', 'Centro'], ['oeste', 'Zona Oeste'], ['sul', 'Zona Sul'], ['norte', 'Zona Norte'], ['leste', 'Zona Leste']]
+      opcoes: [
+        ['centro', 'Centro', 'Centro Histórico, Valongo e Vila Mathias'], ['orla', 'Orla', 'Gonzaga, Boqueirão e Embaré'],
+        ['ponta', 'Ponta da Praia', 'Ponta da Praia e Aparecida'], ['noroeste', 'Zona Noroeste', 'Chico de Paula, Castelo e arredores'],
+        ['morros', 'Morros', 'Nova Cintra, Marapé e arredores']
+      ]
     },
     {
       id: 'horario', tema: 'Horários',
@@ -181,7 +185,7 @@
     domingo: { dia: 0, nome: 'Domingos', hora: '10h00' }
   };
 
-  var BAIRROS = { centro: 'República', oeste: 'Pinheiros', sul: 'Vila Mariana', norte: 'Santana', leste: 'Tatuapé' };
+  var BAIRROS = { centro: 'Centro Histórico', orla: 'Gonzaga', ponta: 'Ponta da Praia', noroeste: 'Zona Noroeste', morros: 'Nova Cintra' };
   var LOCAIS = { cafe: 'Café parceiro', bar: 'Bar parceiro', parque: 'Parque parceiro' };
 
   var OUTROS = [
@@ -216,13 +220,13 @@
   ];
 
   var SALAS = [
-    { id: 'futebol', cat: 'esporte', interesse: 'esporte', tipo: 'Esporte', titulo: 'Pelada de quarta: futebol society', dia: 3, hora: '20h00', local: 'Quadra parceira, Vila Madalena', ocupadas: 4 },
-    { id: 'samba', cat: 'bar', interesse: 'musica', tipo: 'Bar', titulo: 'Roda de samba e chope', dia: 4, hora: '19h00', local: 'Bar parceiro, Pinheiros', ocupadas: 5 },
-    { id: 'cinema', cat: 'cinema', interesse: 'cinema', tipo: 'Cinema', titulo: 'Sessão de cinema e conversa depois', dia: 5, hora: '19h30', local: 'Cinema parceiro, Av. Paulista', ocupadas: 3 },
-    { id: 'jogos', cat: 'jogos', interesse: 'jogos', tipo: 'Jogos', titulo: 'Noite de jogos de tabuleiro', dia: 2, hora: '20h00', local: 'Café parceiro, Consolação', ocupadas: 6 },
-    { id: 'corrida', cat: 'esporte', interesse: 'esporte', tipo: 'Esporte', titulo: 'Corrida leve de 5 km', dia: 6, hora: '8h00', local: 'Parque Ibirapuera, portão 3', ocupadas: 2 },
-    { id: 'pizza', cat: 'bar', interesse: 'gastro', tipo: 'Comida', titulo: 'Noite da pizza artesanal', dia: 5, hora: '20h30', local: 'Pizzaria parceira, Bela Vista', ocupadas: 3 },
-    { id: 'livro', cat: 'cultura', interesse: 'leitura', tipo: 'Cultura', titulo: 'Clube do livro relâmpago', dia: 0, hora: '16h00', local: 'Livraria parceira, Centro', ocupadas: 1 }
+    { id: 'futebol', cat: 'esporte', interesse: 'esporte', tipo: 'Esporte', titulo: 'Pelada de quarta: futebol society', dia: 3, hora: '20h00', local: 'Quadra parceira, Embaré', ocupadas: 4 },
+    { id: 'samba', cat: 'bar', interesse: 'musica', tipo: 'Bar', titulo: 'Roda de samba e chope', dia: 4, hora: '19h00', local: 'Bar parceiro, Valongo', ocupadas: 5 },
+    { id: 'cinema', cat: 'cinema', interesse: 'cinema', tipo: 'Cinema', titulo: 'Sessão de cinema e conversa depois', dia: 5, hora: '19h30', local: 'Cinema parceiro, Gonzaga', ocupadas: 3 },
+    { id: 'jogos', cat: 'jogos', interesse: 'jogos', tipo: 'Jogos', titulo: 'Noite de jogos de tabuleiro', dia: 2, hora: '20h00', local: 'Café parceiro, Boqueirão', ocupadas: 6 },
+    { id: 'corrida', cat: 'esporte', interesse: 'esporte', tipo: 'Esporte', titulo: 'Corrida leve de 5 km na orla', dia: 6, hora: '7h00', local: 'Jardim da orla, Canal 3', ocupadas: 2 },
+    { id: 'pizza', cat: 'bar', interesse: 'gastro', tipo: 'Comida', titulo: 'Noite da pizza artesanal', dia: 5, hora: '20h30', local: 'Pizzaria parceira, Ponta da Praia', ocupadas: 3 },
+    { id: 'livro', cat: 'cultura', interesse: 'leitura', tipo: 'Cultura', titulo: 'Clube do livro relâmpago', dia: 0, hora: '16h00', local: 'Livraria parceira, Centro Histórico', ocupadas: 1 }
   ];
 
   var FILTROS = [
@@ -260,7 +264,7 @@
 
   function infoRoda() {
     var h = HORARIOS[resposta('horario')[0]] || HORARIOS.semana;
-    var bairro = BAIRROS[resposta('regiao')[0]] || 'Pinheiros';
+    var bairro = BAIRROS[resposta('regiao')[0]] || 'Gonzaga';
     var local = LOCAIS[resposta('local')[0]] || 'Café parceiro';
     var base = estado.inicio ? new Date(estado.inicio) : new Date();
     var primeira = proximoDia(h.dia, base);
