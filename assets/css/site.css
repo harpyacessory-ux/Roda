@@ -89,6 +89,7 @@ html {
   min-height: 44px;
   padding: 0 20px;
   font-size: 15px;
+  white-space: nowrap;
 }
 
 /* Hero */
@@ -1031,6 +1032,11 @@ html {
 
 /* Responsivo */
 @media (max-width: 1000px) {
+  /* Com cinco links, o menu não cabe em tablet: fica só o tema e o botão do app */
+  .menu a:not(.btn) {
+    display: none;
+  }
+
   .hero .envoltorio,
   .problema {
     grid-template-columns: minmax(0, 1fr);
@@ -1095,10 +1101,6 @@ html {
 }
 
 @media (max-width: 760px) {
-  .menu a:not(.btn) {
-    display: none;
-  }
-
   .hero {
     padding: 48px 0 72px;
   }
