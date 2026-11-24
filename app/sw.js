@@ -3,16 +3,16 @@
  * Com internet, sempre busca a versão nova; sem internet, usa a guardada.
  * Ao mudar a lista de ARQUIVOS, suba a VERSAO.
  */
-var VERSAO = 'roda-v1';
+var VERSAO = 'roda-v2';
 
 var ARQUIVOS = [
   './',
   './index.html',
   './manifest.webmanifest',
-  '../assets/css/base.css',
-  '../assets/css/app.css',
-  '../assets/js/tema.js',
-  '../assets/js/app.js',
+  '../assets/css/base.css?v=2',
+  '../assets/css/app.css?v=2',
+  '../assets/js/tema.js?v=2',
+  '../assets/js/app.js?v=2',
   '../assets/img/logo-neon.png',
   '../assets/img/favicon.png',
   '../assets/img/icon-192.png',
