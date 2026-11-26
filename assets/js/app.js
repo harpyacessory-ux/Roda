@@ -471,7 +471,7 @@
       '</div>' +
       '<div class="espaco"></div>' +
       '<a class="btn btn-lima btn-bloco pulsar" href="#/quiz" data-acao="comecarQuiz">Entrar numa roda ' + icone('seta', 20, 2.4) + '</a>' +
-      (CONTA ? '<a class="btn btn-texto btn-bloco" href="#/entrar" style="margin-top:6px">Já tenho conta</a>' : '') +
+      (CONTA && !logado() ? '<a class="btn btn-texto btn-bloco" href="#/entrar" style="margin-top:6px">Já tenho conta</a>' : '') +
       '<p class="selo-seguranca">' + icone('escudo', 14) + ' Identidade verificada e encontros em locais públicos parceiros</p>'
     );
   }

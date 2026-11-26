@@ -3,7 +3,7 @@
  * Com internet, sempre busca a versão nova; sem internet, usa a guardada.
  * Ao mudar a lista de ARQUIVOS, suba a VERSAO.
  */
-var VERSAO = 'roda-v3';
+var VERSAO = 'roda-v4';
 
 var ARQUIVOS = [
   './',
@@ -24,9 +24,23 @@ var ARQUIVOS = [
   '../assets/img/kit-descanso.jpg'
 ];
 
+// Biblioteca de login (Firebase). Mesma versão de app/index.html: ao trocar lá, troque aqui.
+// Guardada já na instalação, para o login funcionar sem internet desde a primeira visita.
+var BIBLIOTECAS = [
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js'
+];
+
 self.addEventListener('install', function (evento) {
   evento.waitUntil(
-    caches.open(VERSAO).then(function (cache) { return cache.addAll(ARQUIVOS); }).then(function () { return self.skipWaiting(); })
+    caches.open(VERSAO).then(function (cache) {
+      return cache.addAll(ARQUIVOS).then(function () {
+        // Se o Google não responder agora, a biblioteca é guardada na próxima visita: não trava a instalação
+        return Promise.all(BIBLIOTECAS.map(function (url) {
+          return cache.add(url).catch(function () {});
+        }));
+      });
+    }).then(function () { return self.skipWaiting(); })
   );
 });
 
