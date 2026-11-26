@@ -226,7 +226,14 @@
     cadeado: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
     mais: '<path d="M12 5v14"/><path d="M5 12h14"/>',
     presente: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8c-1.5-3-5-3.5-5-1s3 1 5 1c2 0 5 1.5 5-1s-3.5-2-5 1z"/>',
-    menos: '<path d="M5 12h14"/>'
+    menos: '<path d="M5 12h14"/>',
+    sair: '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 8l-4 4 4 4"/><path d="M6 12h10"/>',
+    celular: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
+    email: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/>',
+    lua: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+    refazer: '<path d="M4 12a8 8 0 0 1 14-5.3L20 8"/><path d="M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-14 5.3L4 16"/><path d="M4 20v-4h4"/>',
+    lixeira: '<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/>',
+    direita: '<path d="M9 6l6 6-6 6"/>'
   };
 
   function icone(nome, tamanho, traco) {
@@ -353,6 +360,8 @@
 
   var DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
   var MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  var DIAS_LONGOS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+  var MESES_LONGOS = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
 
   function rotulo(perguntaId, opcaoId) {
     var p = PERGUNTAS.filter(function (x) { return x.id === perguntaId; })[0];
@@ -454,6 +463,21 @@
 
   function tela(conteudo) {
     return '<main class="tela" id="conteudo" tabindex="-1">' + conteudo + '</main>';
+  }
+
+  // Topo das abas do menu (Minha roda, Cuidado): etiqueta pequena, título e uma ação à direita
+  function cabecalhoAba(sobre, titulo, direita) {
+    return '<div class="topo cabecalho-aba"><div><p class="sobretitulo">' + sobre + '</p>' +
+      '<h1 class="titulo titulo-aba">' + titulo + '</h1></div>' + (direita || '') + '</div>';
+  }
+
+  // Linha de lista no estilo de ajustes: ícone, título, detalhe e seta (ou outro elemento à direita)
+  function itemAjuste(tag, atributos, nomeIcone, titulo, detalhe, direita) {
+    var fim = direita !== undefined ? direita : '<span class="ajuste-seta">' + icone('direita', 18, 2.2) + '</span>';
+    return '<li><' + tag + ' class="ajuste" ' + atributos + '>' +
+      '<span class="ajuste-icone">' + icone(nomeIcone, 18) + '</span>' +
+      '<span class="ajuste-texto"><strong>' + titulo + '</strong>' + (detalhe ? '<small>' + detalhe + '</small>' : '') + '</span>' +
+      fim + '</' + tag + '></li>';
   }
 
   /* ---------- Telas ---------- */
@@ -585,9 +609,7 @@
       : '<a class="btn btn-rosa btn-bloco" href="#/revelacao">Ver revelação ' + icone('seta', 20, 2.4) + '</a>';
 
     return tela(
-      '<div class="topo"><div><p class="sobretitulo" style="margin:0">Ciclo atual</p>' +
-        '<h1 class="titulo" style="margin-top:4px;font-size:21px">Agenda do ciclo</h1></div>' +
-        '<a class="btn-icone" href="#/roda" aria-label="Ver integrantes da roda">' + icone('pessoas') + '</a></div>' +
+      cabecalhoAba('Ciclo atual', 'Agenda do ciclo', '<a class="btn-icone" href="#/roda" aria-label="Ver integrantes da roda">' + icone('pessoas') + '</a>') +
       '<div class="painel-anel"><div class="anel">' + anel(p) +
         '<div class="anel-centro"><strong>' + p + '<span>/4</span></strong><small>presenças</small></div></div>' +
         '<div class="painel-anel-texto"><strong>' + titulos[p] + '</strong><span>' + textos[p] + '</span></div></div>' +
@@ -743,7 +765,7 @@
     }
     return '<article class="sala' + (x.reservada ? ' sala-reservada' : '') + '">' +
       '<div class="sala-topo"><span class="sala-etiquetas"><span class="etiqueta etiqueta-lima">' + x.s.tipo + '</span>' + selo + '</span>' +
-      '<span class="sala-motivo">' + x.motivo + '</span></div>' +
+      (x.combina ? '<span class="sala-combina" title="' + esc(x.motivo) + '">' + icone('estrela', 13, 2.2) + 'Combina com você</span>' : '') + '</div>' +
       '<h3>' + x.s.titulo + '</h3>' +
       '<span class="sala-info"><span style="color:var(--lima-texto)">' + icone('relogio', 14) + '</span>' + x.quando + '</span>' +
       '<span class="sala-info"><span style="color:var(--lima-texto)">' + icone('pino', 14) + '</span>' + x.s.local + '</span>' +
@@ -770,16 +792,23 @@
         '<button class="btn btn-contorno btn-pequeno" type="button" data-acao="filtrar" data-id="todas" style="margin-top:12px">Ver todas as salas</button></div>';
     var n = estado.reservas.length;
 
+    var anelComNumero = function (n) {
+      return '<span class="anel-mini">' + miniAnel(n) + '<b>' + n + '/4</b></span>';
+    };
+    var hoje = new Date();
+    var dataHoje = DIAS_LONGOS[hoje.getDay()] + ', ' + hoje.getDate() + ' de ' + MESES_LONGOS[hoje.getMonth()];
+
     var cartaoRoda = p < 4
-      ? '<a class="cartao-roda" href="#/agenda">' + miniAnel(p) +
+      ? '<a class="cartao-roda" href="#/agenda">' + anelComNumero(p) +
         '<span class="cartao-roda-texto"><small>Sua roda: ' + p + ' de 4 encontros</small><strong>' + info.encontros[p].data + '</strong>' +
         '<span>Semana ' + (p + 1) + ': ' + TEMAS[p] + '</span></span>' + '<span style="color:var(--lima-texto)">' + svg('<path d="M9 6l6 6-6 6"/>', 20, 2.2) + '</span></a>'
-      : '<a class="cartao-roda" href="#/revelacao">' + miniAnel(4) +
+      : '<a class="cartao-roda" href="#/revelacao">' + anelComNumero(4) +
         '<span class="cartao-roda-texto"><small>Ciclo completo</small><strong>Hora da revelação</strong><span>Escolha com quem quer manter contato</span></span></a>';
 
     return tela(
       '<div class="topo"><span class="marca"><img src="' + LOGO + '" alt=""><span>roda</span></span>' +
         '<a class="avatar avatar-voce" href="#/perfil" aria-label="Seu perfil">' + esc(primeiroNome().charAt(0).toUpperCase()) + '</a></div>' +
+      '<p class="sobretitulo">' + dataHoje + '</p>' +
       '<h1 class="titulo">Oi, ' + esc(primeiroNome()) + '</h1>' +
       '<p class="texto-apoio">Rolês pensados a partir do que você curte.</p>' +
       cartaoRoda +
@@ -837,24 +866,29 @@
         '<button class="btn btn-rosa btn-bloco" type="button" data-acao="assinar">Assinar por ' + (estado.solidaria ? 'R$ 119,80' : 'R$ 59,90') + '/mês</button>' +
         '<p class="nota">Versão de teste: o pagamento ainda não está integrado.</p>';
 
+    var precoCartao =
+      '<div class="preco"><div class="preco-topo"><small>Plano mensal</small>' +
+        (estado.assinante ? '<span class="etiqueta etiqueta-lima preco-status">' + icone('check', 12, 3) + ' Ativa</span>' : '') + '</div>' +
+        '<strong>R$ 59,90<span>/mês</span></strong>' +
+        (estado.assinante ? '' : '<button class="btn btn-rosa btn-bloco preco-botao" type="button" data-acao="irParaAssinar">Quero assinar</button>') +
+      '</div>';
+
     return tela(
-      '<div class="topo">' + btnVoltar('#/inicio', 'Voltar ao início') + '<img class="logo-neon" src="' + LOGO + '" width="40" height="40" alt="Roda"></div>' +
-      '<p class="sobretitulo">Assinatura</p>' +
-      '<h1 class="titulo titulo-grande">Roda Cuidado</h1>' +
+      cabecalhoAba('Assinatura', 'Roda Cuidado', '<img class="logo-neon" src="' + LOGO + '" width="40" height="40" alt="">') +
       '<p class="texto-apoio">Apoio profissional para quem quer se conectar melhor. Funciona junto com as suas rodas e salas.</p>' +
-      '<div class="preco"><div><small>Plano mensal</small><strong>R$ 59,90</strong></div><span>por mês</span></div>' +
+      precoCartao +
       '<h2 class="secao-titulo" style="font-size:15px;margin-top:28px">O que está incluído</h2>' +
-      '<ul class="beneficios">' + beneficios + '</ul>' +
+      '<ul class="beneficios agrupado">' + beneficios + '</ul>' +
       '<h2 class="secao-titulo" style="font-size:15px;margin-top:28px">Os kits do mês</h2>' +
       '<p class="texto-apoio" style="margin-top:4px">Deslize para conhecer. O kit é definido na triagem e pode mudar a cada mês.</p>' +
       '<ul class="kits" aria-label="Kits de cuidado">' + kits + '</ul>' +
       '<p class="nota" style="text-align:left">Os kits apoiam o acompanhamento e não substituem tratamento. Fitoterápicos só entram com indicação do profissional. Imagens ilustrativas.</p>' +
       '<h2 class="secao-titulo" style="font-size:15px;margin-top:28px">Quem faz a rede</h2>' +
-      '<ul class="beneficios">' + rede + '</ul>' +
+      '<ul class="beneficios agrupado">' + rede + '</ul>' +
       '<p class="nota" style="text-align:left">Apoiadores não têm acesso aos seus dados nem indicam tratamento ou remédio. Essa decisão é sempre do profissional.</p>' +
       '<div class="card card-tracejado"><div class="linha-info"><span style="color:var(--rosa-texto)">' + icone('info') + '</span>' +
         '<span>A Roda Cuidado não é atendimento de emergência. Em um momento de crise, ligue 188 (CVV), gratuito e 24 horas.</span></div></div>' +
-      '<div class="espaco"></div>' + acao + navApp('cuidado')
+      '<div class="espaco"></div><div id="assinar" class="assinar-caixa" tabindex="-1">' + acao + '</div>' + navApp('cuidado')
     );
   }
 
@@ -864,34 +898,54 @@
     }).join('') || '<span class="texto-apoio" style="margin:0">Nenhum interesse escolhido</span>';
     var info = infoRoda();
     var energia = rotulo('energia', resposta('energia')[0]);
+    var p = estado.presencas;
+    var n = estado.reservas.length;
+
+    var numeros =
+      '<div class="perfil-numeros">' +
+        '<div><strong>' + p + '<span>/4</span></strong><small>encontros</small></div>' +
+        '<div><strong>' + n + '</strong><small>' + (n === 1 ? 'sala reservada' : 'salas reservadas') + '</small></div>' +
+        '<div><strong class="' + (estado.assinante ? 'plano-cuidado' : '') + '">' + (estado.assinante ? 'Cuidado' : 'Grátis') + '</strong><small>seu plano</small></div>' +
+      '</div>';
+
+    var grupoRoda =
+      '<h2 class="grupo-titulo">Sua roda</h2><ul class="ajustes">' +
+        itemAjuste('a', 'href="#/agenda"', 'calendario', info.horario.nome + ' às ' + info.horario.hora, info.local + ', ' + info.bairro) +
+        itemAjuste('a', 'href="#/roda"', 'pessoas', 'Integrantes', '6 pessoas, sempre as mesmas') +
+        itemAjuste('button', 'type="button" data-acao="refazerQuiz"', 'refazer', 'Refazer quiz de ritmo', 'Mude horários, região e interesses') +
+      '</ul>';
+
+    var grupoApp =
+      '<h2 class="grupo-titulo">App</h2><ul class="ajustes">' +
+        (window.RodaTema ? itemAjuste('div', '', 'lua', 'Tema', 'Claro ou escuro', RodaTema.botao()) : '') +
+        itemInstalar() +
+      '</ul>';
+
+    var grupoConta = logado()
+      ? '<h2 class="grupo-titulo">Conta</h2><ul class="ajustes">' +
+          itemAjuste('div', '', 'email', 'E-mail', '<span class="conta-email">' + esc(CONTA.usuario.email || '') + '</span>', '') +
+          itemAjuste('button', 'type="button" data-acao="sairConta"', 'sair', 'Sair da conta', 'Seu progresso continua salvo', '') +
+        '</ul>' +
+        '<a class="btn btn-texto btn-bloco perfil-perigo" href="#/excluir-conta">Excluir minha conta</a>'
+      : '<ul class="ajustes" style="margin-top:28px">' +
+          itemAjuste('button', 'type="button" data-acao="apagarDados"', 'lixeira', 'Apagar meus dados', 'Nome, respostas e reservas deste aparelho', '') +
+        '</ul>';
 
     return tela(
-      '<div class="topo">' + btnVoltar('#/inicio', 'Voltar ao início') + (window.RodaTema ? RodaTema.botao() : '<span></span>') + '</div>' +
+      '<div class="topo"><p class="sobretitulo" style="margin:0">Seu perfil</p></div>' +
       '<div class="perfil-cabecalho"><span class="avatar avatar-voce">' + esc(primeiroNome().charAt(0).toUpperCase()) + '</span>' +
         '<div><h1 class="titulo" style="margin:0">' + esc(primeiroNome()) + '</h1>' +
-        '<p class="texto-apoio" style="margin-top:4px">' + info.bairro + (energia ? ', ' + energia.toLowerCase() : '') + '</p></div></div>' +
-      '<h2 class="secao-titulo" style="font-size:15px">Seus interesses</h2><div class="chips">' + interesses + '</div>' +
-      '<h2 class="secao-titulo" style="font-size:15px">Sua roda</h2>' +
-      '<p class="texto-apoio">' + info.horario.nome + ' às ' + info.horario.hora + ', ' + info.local.toLowerCase() + ' em ' + info.bairro + '.</p>' +
-      '<div class="card"><strong style="font-size:15px">Modo demonstração</strong>' +
-        '<p class="texto-apoio" style="margin-top:4px;font-size:13px">Ajuste as presenças para mostrar cada etapa do ciclo no pitch.</p>' +
+        '<p class="texto-apoio" style="margin-top:4px">' + info.bairro + (energia ? ' · ' + energia.toLowerCase() : '') + '</p></div></div>' +
+      '<div class="chips" aria-label="Seus interesses">' + interesses + '</div>' +
+      numeros + grupoRoda + grupoApp + grupoConta +
+      '<div class="card card-tracejado demo-caixa"><strong>Modo demonstração</strong>' +
+        '<p class="texto-apoio">Para apresentações: ajuste as presenças e mostre cada etapa do ciclo.</p>' +
         '<div class="passo-demo"><span style="font-weight:700">Presenças</span><div>' +
           '<button class="btn-icone" type="button" data-acao="presencaMenos" aria-label="Diminuir presenças">' + icone('menos') + '</button>' +
           '<output aria-live="polite">' + estado.presencas + '</output>' +
           '<button class="btn-icone" type="button" data-acao="presencaMais" aria-label="Aumentar presenças">' + icone('mais') + '</button>' +
         '</div></div></div>' +
-      cartaoInstalar() +
-      (logado()
-        ? '<div class="card"><strong style="font-size:15px">Sua conta</strong>' +
-            '<p class="texto-apoio conta-email" style="margin-top:4px;font-size:13px">' + esc(CONTA.usuario.email || '') + '</p>' +
-            '<p class="texto-apoio" style="margin-top:4px;font-size:13px">Seu progresso fica salvo na conta. Entre com esse e-mail e sua senha em qualquer celular.</p>' +
-            '<button class="btn btn-contorno btn-bloco" type="button" data-acao="sairConta" style="margin-top:12px">Sair da conta</button></div>'
-        : '') +
       '<div class="espaco"></div>' +
-      '<button class="btn btn-contorno btn-bloco" type="button" data-acao="refazerQuiz">Refazer quiz de ritmo</button>' +
-      (logado()
-        ? '<a class="btn btn-texto btn-bloco" href="#/excluir-conta" style="margin-top:6px;color:var(--rosa-claro-texto)">Excluir minha conta</a>'
-        : '<button class="btn btn-texto btn-bloco" type="button" data-acao="apagarDados" style="margin-top:6px;color:var(--rosa-claro-texto)">Apagar meus dados deste aparelho</button>') +
       navApp('perfil')
     );
   }
@@ -1122,18 +1176,17 @@
     return /iphone|ipad|ipod/i.test(ua) || (/Macintosh/.test(ua) && 'ontouchend' in document);
   }
 
-  function cartaoInstalar() {
+  // Linha "Instalar o app" do Perfil: botão quando o navegador permite, instruções quando não
+  function itemInstalar() {
     if (appInstalado()) return '';
-    var conteudo;
     if (pedidoInstalacao) {
-      conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">Coloque a Roda na tela inicial e abra como um app, até sem internet.</p>' +
-        '<button class="btn btn-lima btn-bloco" type="button" data-acao="instalarApp" style="margin-top:12px">Instalar o app</button>';
-    } else if (ehIphone()) {
-      conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">Toque em <strong>Compartilhar</strong> (o quadrado com a seta para cima) e depois em <strong>Adicionar à Tela de Início</strong>.</p>';
-    } else {
-      conteudo = '<p class="texto-apoio" style="margin-top:4px;font-size:13px">No Chrome, abra o menu <strong>⋮</strong> e toque em <strong>Instalar app</strong> ou <strong>Adicionar à tela inicial</strong>.</p>';
+      return itemAjuste('div', '', 'celular', 'Instalar o app', 'Abra a Roda como app, até sem internet',
+        '<button class="btn btn-lima btn-pequeno" type="button" data-acao="instalarApp">Instalar</button>');
     }
-    return '<div class="card card-neon"><strong style="font-size:15px">Instalar o app</strong>' + conteudo + '</div>';
+    var passos = ehIphone()
+      ? 'No Safari, toque em <b>Compartilhar</b> e em <b>Adicionar à Tela de Início</b>'
+      : 'No Chrome, abra o menu <b>⋮</b> e toque em <b>Instalar app</b>';
+    return itemAjuste('div', '', 'celular', 'Instalar o app', passos, '');
   }
 
   window.addEventListener('beforeinstallprompt', function (evento) {
@@ -1281,6 +1334,14 @@
     refazerQuiz: function () {
       passoQuiz = 0;
       ir('#/quiz');
+    },
+    irParaAssinar: function () {
+      var caixa = document.getElementById('assinar');
+      if (!caixa) return;
+      var suave = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      caixa.scrollIntoView({ behavior: suave ? 'smooth' : 'auto', block: 'center' });
+      var botao = caixa.querySelector('[data-acao="assinar"]');
+      if (botao) botao.focus({ preventScroll: true });
     },
     verSenha: function (d, botao) {
       var campo = document.getElementById(botao.getAttribute('aria-controls'));

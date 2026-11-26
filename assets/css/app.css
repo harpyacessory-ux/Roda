@@ -1598,3 +1598,272 @@ body.app {
 @media (prefers-reduced-motion: reduce) {
   .carregando img { animation: none; }
 }
+
+/* ---------- Abas: topo padronizado ---------- */
+.cabecalho-aba {
+  align-items: flex-start;
+}
+
+.cabecalho-aba .sobretitulo {
+  margin: 0;
+}
+
+.titulo-aba {
+  margin-top: 4px;
+  font-size: 24px;
+}
+
+/* Início: anel com o número de encontros dentro */
+.anel-mini {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.anel-mini b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--fonte-titulo);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--texto);
+}
+
+/* Salas: selo curto no lugar da frase longa */
+.sala-combina {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--lima-texto);
+  white-space: nowrap;
+}
+
+/* Roda Cuidado */
+.preco {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.preco-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.preco strong {
+  white-space: nowrap;
+}
+
+.preco-botao {
+  margin-top: 16px;
+  min-height: 50px;
+}
+
+.preco strong span {
+  margin-left: 4px;
+  font-family: var(--fonte-texto, inherit);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-shadow: none;
+}
+
+.preco .preco-status {
+  font-size: 12px;
+  color: var(--lima-texto);
+}
+
+.beneficios.agrupado {
+  gap: 0;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-card);
+  background: var(--superficie);
+  overflow: hidden;
+}
+
+.beneficios.agrupado li {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.beneficios.agrupado li + li {
+  border-top: 1px solid var(--linha);
+}
+
+.assinar-caixa {
+  scroll-margin-bottom: 120px;
+  outline: none;
+}
+
+/* ---------- Perfil ---------- */
+.perfil-cabecalho {
+  margin-top: 16px;
+}
+
+.perfil-cabecalho + .chips {
+  margin-top: 16px;
+}
+
+.perfil-numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.perfil-numeros div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 12px;
+  border: 1px solid var(--linha);
+  border-radius: 16px;
+  background: var(--superficie);
+}
+
+.perfil-numeros strong {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(16px, 4.8vw, 20px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--texto);
+}
+
+.perfil-numeros strong span {
+  font-size: 14px;
+  color: var(--apoio);
+}
+
+.perfil-numeros strong.plano-cuidado {
+  color: var(--rosa-texto);
+}
+
+.perfil-numeros small {
+  font-size: 12px;
+  color: var(--apoio);
+}
+
+.grupo-titulo {
+  margin: 28px 0 8px 4px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--apoio);
+}
+
+.ajustes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-card);
+  background: var(--superficie);
+  overflow: hidden;
+}
+
+.ajustes li + li {
+  border-top: 1px solid var(--linha);
+}
+
+.ajuste {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+
+a.ajuste,
+button.ajuste {
+  cursor: pointer;
+}
+
+a.ajuste:hover,
+button.ajuste:hover {
+  background: var(--superficie-2);
+}
+
+a.ajuste:focus-visible,
+button.ajuste:focus-visible {
+  outline: 2px solid var(--lima-traco);
+  outline-offset: -2px;
+}
+
+.ajuste-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: var(--superficie-2);
+  color: var(--lima-texto);
+}
+
+.ajuste-texto {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ajuste-texto strong {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ajuste-texto small {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--apoio);
+}
+
+.ajuste-texto small b {
+  color: var(--texto);
+}
+
+.ajuste-seta {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--apoio);
+}
+
+.ajuste-texto .conta-email {
+  color: inherit;
+  font-weight: inherit;
+}
+
+.perfil-perigo {
+  margin-top: 6px;
+  color: var(--rosa-claro-texto);
+}
+
+.demo-caixa {
+  margin-top: 24px;
+}
+
+.demo-caixa > strong {
+  font-size: 15px;
+}
+
+.demo-caixa .texto-apoio {
+  margin-top: 4px;
+  font-size: 13px;
+}
