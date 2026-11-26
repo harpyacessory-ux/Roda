@@ -1216,3 +1216,9 @@ html {
 .politica-intro {
   font-size: 18px !important;
 }
+
+.politica a {
+  color: var(--lima-texto);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
