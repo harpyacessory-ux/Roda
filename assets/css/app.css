@@ -1465,3 +1465,136 @@ body.app {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+
+/* Contas: criar conta, entrar, recuperar senha, excluir */
+.form-conta {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-conta .btn[type="submit"] {
+  margin-top: 22px;
+}
+
+.campo-senha {
+  position: relative;
+  display: flex;
+}
+
+.campo-senha input {
+  flex: 1;
+  min-width: 0;
+  padding-right: 92px;
+}
+
+.ver-senha {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: transparent;
+  color: var(--lima-texto);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ver-senha:focus-visible {
+  outline: 2px solid var(--lima-traco);
+}
+
+.dica-campo {
+  color: var(--apoio);
+  font-size: 13px;
+}
+
+.aceite {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--apoio);
+  cursor: pointer;
+}
+
+.aceite input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--lima);
+}
+
+.aceite a,
+.nota a,
+.link-direita a {
+  color: var(--lima-texto);
+  font-weight: 700;
+}
+
+.link-direita {
+  margin: 12px 0 0;
+  text-align: right;
+  font-size: 14px;
+}
+
+.form-erro,
+.form-ok {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: var(--raio-campo);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.form-erro {
+  border: 1px solid var(--rosa-texto);
+  color: var(--rosa-claro-texto);
+}
+
+.form-ok {
+  border: 1px solid var(--lima-traco);
+  color: var(--texto);
+}
+
+.form-erro[hidden],
+.form-ok[hidden] {
+  display: none;
+}
+
+.conta-email {
+  overflow-wrap: anywhere;
+  color: var(--texto);
+  font-weight: 700;
+}
+
+.carregando {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 60vh;
+  color: var(--apoio);
+  font-weight: 700;
+}
+
+.carregando img {
+  animation: girar-devagar 2.4s linear infinite;
+}
+
+@keyframes girar-devagar {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carregando img { animation: none; }
+}

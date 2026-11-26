@@ -1,6 +1,8 @@
 /* Roda — app (JavaScript puro, sem build)
  * Rotas por hash: #/  #/quiz  #/roda  #/inicio  #/agenda  #/ritual  #/revelacao  #/cuidado  #/perfil
- * Os dados ficam só no navegador da pessoa (localStorage).
+ *                 #/criar-conta  #/entrar  #/recuperar  #/excluir-conta
+ * Os dados ficam no navegador (localStorage) e, com o Firebase configurado,
+ * também na conta da pessoa (veja conta.js), para ela entrar em qualquer aparelho.
  */
 (function () {
   'use strict';
@@ -24,20 +26,24 @@
       fila: [],
       filtro: 'pravoce',
       assinante: false,
-      solidaria: false
+      solidaria: false,
+      conta: '',  // uid da conta dona destes dados ('' = ainda sem conta)
+      salvoEm: 0  // quando foi a última mudança, para saber qual cópia é a mais nova
     };
   }
 
-  // Dados salvos de versões antigas ou corrompidos não podem travar o app:
-  // cada campo só é aproveitado se tiver o mesmo tipo do padrão
   function carregar() {
-    var limpo = estadoPadrao();
-    var salvo;
     try {
-      salvo = JSON.parse(localStorage.getItem(CHAVE));
+      return sanear(JSON.parse(localStorage.getItem(CHAVE)));
     } catch (e) {
-      return limpo;
+      return estadoPadrao();
     }
+  }
+
+  // Dados de versões antigas, corrompidos ou vindos da conta não podem travar o app:
+  // cada campo só é aproveitado se tiver o mesmo tipo do padrão
+  function sanear(salvo) {
+    var limpo = estadoPadrao();
     if (!salvo || typeof salvo !== 'object') return limpo;
     Object.keys(limpo).forEach(function (k) {
       var v = salvo[k];
@@ -56,12 +62,123 @@
   var passoQuiz = 0;
   var ultimaRota = null;
 
-  function salvar() {
+  function gravarLocal() {
     try {
       localStorage.setItem(CHAVE, JSON.stringify(estado));
     } catch (e) {
       /* navegação privada sem armazenamento: o app segue funcionando nesta sessão */
     }
+  }
+
+  function salvar() {
+    estado.salvoEm = Date.now();
+    gravarLocal();
+    if (!logado()) return;
+    if (nuvemLida) {
+      syncPendente = true;
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(enviarDepois, 1200);
+    } else {
+      lerNuvem(CONTA.usuario.uid).then(function (mudou) { if (mudou) render(); });
+    }
+  }
+
+  /* ---------- Conta (e-mail e senha) ---------- */
+
+  var CONTA = window.RodaConta && window.RodaConta.ativo ? window.RodaConta : null;
+  var nuvemLida = false;    // já comparamos o aparelho com a conta nesta sessão
+  var syncPendente = false; // há mudança no aparelho que ainda não foi para a conta
+  var syncTimer = null;
+  var filaNuvem = Promise.resolve();
+  var leitura = null;
+  var saindo = false;       // saindo ou excluindo a conta: ignora o aviso de logout do Firebase
+  var emailDigitado = '';
+
+  function logado() {
+    return !!(CONTA && CONTA.usuario);
+  }
+
+  // Manda o estado para a conta, um envio de cada vez, para um antigo não passar por cima de um novo
+  function enviarNuvem(manterAberto) {
+    clearTimeout(syncTimer);
+    if (!logado() || !syncPendente) return filaNuvem;
+    syncPendente = false;
+    var copia = JSON.parse(JSON.stringify(estado));
+    filaNuvem = filaNuvem.catch(function () {}).then(function () {
+      return CONTA.salvarDados(copia, manterAberto);
+    }).catch(function (erro) {
+      syncPendente = true;
+      throw erro;
+    });
+    return filaNuvem;
+  }
+
+  function enviarDepois() {
+    enviarNuvem().catch(function () { /* tenta de novo na próxima mudança ou quando a internet voltar */ });
+  }
+
+  // Compara o aparelho com a conta e fica com a cópia mais nova. Resolve true se a tela precisa mudar.
+  function lerNuvem(uid) {
+    if (leitura) return leitura;
+    leitura = CONTA.lerDados().then(function (remoto) {
+      leitura = null;
+      if (!logado() || CONTA.usuario.uid !== uid) return false;
+      nuvemLida = true;
+      var localEhDaConta = estado.conta === uid;
+      if (remoto && !(localEhDaConta && estado.salvoEm > (Number(remoto.salvoEm) || 0))) {
+        var antes = JSON.stringify(estado);
+        estado = sanear(remoto);
+        estado.conta = uid;
+        gravarLocal();
+        return JSON.stringify(estado) !== antes;
+      }
+      // Conta nova (ou o aparelho tem a cópia mais nova): leva o que está no aparelho para a conta, já
+      estado.conta = uid;
+      salvar();
+      enviarDepois();
+      return false;
+    }, function () {
+      leitura = null;
+      return false; // sem internet: segue com o que está no aparelho e tenta de novo depois
+    });
+    return leitura;
+  }
+
+  function aoMudarConta(usuario) {
+    if (saindo) return;
+    if (!usuario) {
+      nuvemLida = false;
+      render();
+      return;
+    }
+    var r = rotaAtual();
+    var acabouDeEntrar = r === 'entrar' || r === 'criar-conta';
+    if (!acabouDeEntrar) render(); // abre logo com o que está no aparelho
+    lerNuvem(usuario.uid).then(function (mudou) {
+      if (acabouDeEntrar) ir(!estado.onboarded ? '#/quiz' : r === 'criar-conta' ? '#/roda' : '#/inicio');
+      else if (mudou) render();
+    });
+  }
+
+  function limparAparelho() {
+    clearTimeout(syncTimer);
+    syncPendente = false;
+    nuvemLida = false;
+    try { localStorage.removeItem(CHAVE); } catch (e) { /* sem armazenamento */ }
+    estado = estadoPadrao();
+    passoQuiz = 0;
+  }
+
+  if (CONTA) {
+    CONTA.aoMudar(aoMudarConta);
+    window.addEventListener('online', function () {
+      if (!logado()) return;
+      if (!nuvemLida) lerNuvem(CONTA.usuario.uid).then(function (mudou) { if (mudou) render(); });
+      else if (syncPendente) enviarDepois();
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden' && syncPendente) enviarNuvem(true).catch(function () {});
+    });
   }
 
   function atualizar(mudancas) {
@@ -354,6 +471,7 @@
       '</div>' +
       '<div class="espaco"></div>' +
       '<a class="btn btn-lima btn-bloco pulsar" href="#/quiz" data-acao="comecarQuiz">Entrar numa roda ' + icone('seta', 20, 2.4) + '</a>' +
+      (CONTA ? '<a class="btn btn-texto btn-bloco" href="#/entrar" style="margin-top:6px">Já tenho conta</a>' : '') +
       '<p class="selo-seguranca">' + icone('escudo', 14) + ' Identidade verificada e encontros em locais públicos parceiros</p>'
     );
   }
@@ -763,12 +881,233 @@
           '<button class="btn-icone" type="button" data-acao="presencaMais" aria-label="Aumentar presenças">' + icone('mais') + '</button>' +
         '</div></div></div>' +
       cartaoInstalar() +
+      (logado()
+        ? '<div class="card"><strong style="font-size:15px">Sua conta</strong>' +
+            '<p class="texto-apoio conta-email" style="margin-top:4px;font-size:13px">' + esc(CONTA.usuario.email || '') + '</p>' +
+            '<p class="texto-apoio" style="margin-top:4px;font-size:13px">Seu progresso fica salvo na conta. Entre com esse e-mail e sua senha em qualquer celular.</p>' +
+            '<button class="btn btn-contorno btn-bloco" type="button" data-acao="sairConta" style="margin-top:12px">Sair da conta</button></div>'
+        : '') +
       '<div class="espaco"></div>' +
       '<button class="btn btn-contorno btn-bloco" type="button" data-acao="refazerQuiz">Refazer quiz de ritmo</button>' +
-      '<button class="btn btn-texto btn-bloco" type="button" data-acao="apagarDados" style="margin-top:6px;color:var(--rosa-claro-texto)">Apagar meus dados deste aparelho</button>' +
+      (logado()
+        ? '<a class="btn btn-texto btn-bloco" href="#/excluir-conta" style="margin-top:6px;color:var(--rosa-claro-texto)">Excluir minha conta</a>'
+        : '<button class="btn btn-texto btn-bloco" type="button" data-acao="apagarDados" style="margin-top:6px;color:var(--rosa-claro-texto)">Apagar meus dados deste aparelho</button>') +
       navApp('perfil')
     );
   }
+
+  /* ---------- Telas de conta ---------- */
+
+  function campoEmail() {
+    return '<div class="campo"><label for="email">E-mail</label>' +
+      '<input id="email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="120" value="' + esc(emailDigitado) + '" placeholder="nome@exemplo.com"></div>';
+  }
+
+  function campoSenha(rotuloTexto, autocomplete, dica) {
+    return '<div class="campo"><label for="senha">' + rotuloTexto + '</label>' +
+      '<div class="campo-senha"><input id="senha" name="senha" type="password" autocomplete="' + autocomplete + '" maxlength="128"' + (dica ? ' aria-describedby="senha-dica"' : '') + '>' +
+      '<button class="ver-senha" type="button" data-acao="verSenha" aria-pressed="false" aria-controls="senha">Mostrar</button></div>' +
+      (dica ? '<small id="senha-dica" class="dica-campo">' + dica + '</small>' : '') + '</div>';
+  }
+
+  var AVISO_FORM = '<p class="form-erro" role="alert" hidden></p>';
+
+  function telaCarregando() {
+    return tela(
+      '<div class="carregando" role="status"><img class="logo-neon" src="' + LOGO + '" width="72" height="72" alt="">' +
+      '<span>Carregando…</span></div>'
+    );
+  }
+
+  function telaCriarConta() {
+    var depoisDoQuiz = estado.onboarded;
+    return tela(
+      '<div class="topo">' + btnVoltar(depoisDoQuiz ? '#/quiz' : '#/', 'Voltar') + (window.RodaTema ? RodaTema.botao() : '<span></span>') + '</div>' +
+      '<p class="sobretitulo">' + (depoisDoQuiz ? 'Último passo' : 'Criar conta') + '</p>' +
+      '<h1 class="titulo titulo-menor">' + (depoisDoQuiz ? 'Sua roda está quase pronta' : 'Crie sua conta') + '</h1>' +
+      '<p class="texto-apoio">Crie sua conta com e-mail e senha para guardar sua vaga e entrar no app em qualquer celular.</p>' +
+      '<form class="form-conta" data-form="criar" novalidate>' +
+        campoEmail() +
+        campoSenha('Crie uma senha', 'new-password', 'Pelo menos 8 caracteres.') +
+        '<label class="aceite"><input type="checkbox" name="aceite"> <span>Li e aceito a <a href="../privacidade.html" target="_blank" rel="noopener">política de privacidade</a>.</span></label>' +
+        AVISO_FORM +
+        '<button class="btn btn-lima btn-bloco" type="submit">' + (depoisDoQuiz ? 'Criar conta e ver minha roda' : 'Criar conta') + ' ' + icone('seta', 20, 2.4) + '</button>' +
+      '</form>' +
+      '<p class="nota">Já tem conta? <a href="#/entrar">Entrar</a></p>'
+    );
+  }
+
+  function telaEntrar() {
+    return tela(
+      '<div class="topo">' + btnVoltar('#/', 'Voltar') + (window.RodaTema ? RodaTema.botao() : '<span></span>') + '</div>' +
+      '<p class="sobretitulo">Entrar</p>' +
+      '<h1 class="titulo titulo-menor">Que bom te ver de novo</h1>' +
+      '<p class="texto-apoio">Entre com o e-mail e a senha da sua conta.</p>' +
+      '<form class="form-conta" data-form="entrar" novalidate>' +
+        campoEmail() +
+        campoSenha('Senha', 'current-password') +
+        '<p class="link-direita"><a href="#/recuperar">Esqueci minha senha</a></p>' +
+        AVISO_FORM +
+        '<button class="btn btn-lima btn-bloco" type="submit">Entrar ' + icone('seta', 20, 2.4) + '</button>' +
+      '</form>' +
+      '<p class="nota">Ainda não tem conta? <a href="#/">Comece pelo quiz</a></p>'
+    );
+  }
+
+  function telaRecuperar() {
+    return tela(
+      '<div class="topo">' + btnVoltar('#/entrar', 'Voltar para entrar') + (window.RodaTema ? RodaTema.botao() : '<span></span>') + '</div>' +
+      '<p class="sobretitulo">Nova senha</p>' +
+      '<h1 class="titulo titulo-menor">Esqueceu a senha?</h1>' +
+      '<p class="texto-apoio">Digite o e-mail da sua conta. Vamos mandar um link para você criar uma senha nova.</p>' +
+      '<form class="form-conta" data-form="recuperar" novalidate>' +
+        campoEmail() +
+        AVISO_FORM +
+        '<p class="form-ok" role="status" hidden></p>' +
+        '<button class="btn btn-lima btn-bloco" type="submit">Enviar link</button>' +
+      '</form>' +
+      '<p class="nota"><a href="#/entrar">Voltar para entrar</a></p>'
+    );
+  }
+
+  function telaExcluirConta() {
+    return tela(
+      '<div class="topo">' + btnVoltar('#/perfil', 'Voltar ao perfil') + '<span></span></div>' +
+      '<p class="sobretitulo" style="color:var(--rosa-claro-texto)">Excluir conta</p>' +
+      '<h1 class="titulo titulo-menor">Tem certeza?</h1>' +
+      '<p class="texto-apoio">Isso apaga para sempre seu e-mail, sua senha, suas respostas do quiz e o progresso da sua roda. Não dá para desfazer.</p>' +
+      '<form class="form-conta" data-form="excluir" novalidate>' +
+        campoSenha('Digite sua senha para confirmar', 'current-password') +
+        AVISO_FORM +
+        '<button class="btn btn-rosa btn-bloco" type="submit">Excluir minha conta</button>' +
+      '</form>' +
+      '<p class="nota"><a href="#/perfil">Mudei de ideia, voltar ao perfil</a></p>'
+    );
+  }
+
+  /* ---------- Formulários de conta ---------- */
+
+  var EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function mostrarErro(form, mensagem) {
+    var p = form.querySelector('.form-erro');
+    if (!p) return;
+    p.textContent = mensagem || '';
+    p.hidden = !mensagem;
+  }
+
+  function ocupado(form, sim, texto) {
+    var botao = form.querySelector('[type="submit"]');
+    if (!botao) return;
+    if (sim) {
+      botao.setAttribute('data-original', botao.innerHTML);
+      botao.disabled = true;
+      botao.textContent = texto;
+    } else if (botao.hasAttribute('data-original')) {
+      botao.innerHTML = botao.getAttribute('data-original');
+      botao.removeAttribute('data-original');
+      botao.disabled = false;
+    }
+  }
+
+  function falhou(form) {
+    return function (erro) {
+      ocupado(form, false);
+      mostrarErro(form, CONTA.mensagem(erro));
+    };
+  }
+
+  function lerEmail(form) {
+    var email = form.elements.email.value.trim();
+    if (!EMAIL_VALIDO.test(email)) {
+      mostrarErro(form, 'Digite um e-mail válido, como nome@exemplo.com.');
+      form.elements.email.focus();
+      return '';
+    }
+    return email;
+  }
+
+  var FORMULARIOS = {
+    criar: function (form) {
+      var email = lerEmail(form);
+      if (!email) return;
+      var senha = form.elements.senha.value;
+      if (senha.length < 8) {
+        mostrarErro(form, 'A senha precisa ter pelo menos 8 caracteres.');
+        form.elements.senha.focus();
+        return;
+      }
+      if (!form.elements.aceite.checked) {
+        mostrarErro(form, 'Para criar a conta, marque que você aceita a política de privacidade.');
+        form.elements.aceite.focus();
+        return;
+      }
+      mostrarErro(form, '');
+      ocupado(form, true, 'Criando sua conta…');
+      // Deu certo: o Firebase avisa o aoMudarConta, que leva os dados para a conta e abre a roda
+      CONTA.criar(email, senha).catch(falhou(form));
+    },
+    entrar: function (form) {
+      var email = lerEmail(form);
+      if (!email) return;
+      var senha = form.elements.senha.value;
+      if (!senha) {
+        mostrarErro(form, 'Digite sua senha.');
+        form.elements.senha.focus();
+        return;
+      }
+      mostrarErro(form, '');
+      ocupado(form, true, 'Entrando…');
+      CONTA.entrar(email, senha).catch(falhou(form));
+    },
+    recuperar: function (form) {
+      var email = lerEmail(form);
+      if (!email) return;
+      var ok = form.querySelector('.form-ok');
+      mostrarErro(form, '');
+      ok.hidden = true;
+      ocupado(form, true, 'Enviando…');
+      function enviado() {
+        ocupado(form, false);
+        ok.textContent = 'Se existir uma conta com esse e-mail, o link para criar uma senha nova já está a caminho. Confira também a caixa de spam.';
+        ok.hidden = false;
+      }
+      CONTA.recuperar(email).then(enviado, function (erro) {
+        // Por segurança, não contamos se o e-mail tem conta: a resposta é a mesma
+        if (erro && erro.code === 'auth/user-not-found') enviado();
+        else falhou(form)(erro);
+      });
+    },
+    excluir: function (form) {
+      var senha = form.elements.senha.value;
+      if (!senha) {
+        mostrarErro(form, 'Digite sua senha para confirmar.');
+        form.elements.senha.focus();
+        return;
+      }
+      mostrarErro(form, '');
+      ocupado(form, true, 'Excluindo…');
+      saindo = true;
+      CONTA.excluir(senha).then(function () {
+        limparAparelho();
+        saindo = false;
+        avisar('Sua conta e seus dados foram excluídos.');
+        ir('#/');
+      }, function (erro) {
+        saindo = false;
+        falhou(form)(erro);
+      });
+    }
+  };
+
+  document.addEventListener('submit', function (evento) {
+    var form = evento.target;
+    var tipo = form.getAttribute && form.getAttribute('data-form');
+    if (!tipo || !FORMULARIOS[tipo]) return;
+    evento.preventDefault();
+    if (!CONTA) return;
+    FORMULARIOS[tipo](form);
+  });
 
   /* ---------- Instalar na tela inicial ---------- */
 
@@ -871,7 +1210,8 @@
       }
       Object.assign(estado, mudancas);
       salvar();
-      ir('#/roda');
+      // Com contas ligadas, a roda só aparece depois de criar a conta
+      ir(CONTA && !logado() ? '#/criar-conta' : '#/roda');
     },
     cartaProxima: function () {
       atualizar({ carta: estado.carta + 1 });
@@ -942,6 +1282,33 @@
       passoQuiz = 0;
       ir('#/quiz');
     },
+    verSenha: function (d, botao) {
+      var campo = document.getElementById(botao.getAttribute('aria-controls'));
+      if (!campo) return;
+      var mostrar = campo.type === 'password';
+      campo.type = mostrar ? 'text' : 'password';
+      botao.setAttribute('aria-pressed', String(mostrar));
+      botao.textContent = mostrar ? 'Ocultar' : 'Mostrar';
+    },
+    sairConta: function (d, botao) {
+      if (!CONTA || saindo) return;
+      saindo = true;
+      botao.disabled = true;
+      // Antes de sair, termina de salvar na conta o que mudou neste aparelho
+      enviarNuvem().catch(function () {
+        if (!window.confirm('Sem internet, as últimas mudanças podem não ter ido para a sua conta. Sair mesmo assim?')) throw new Error('cancelado');
+      }).then(function () {
+        return CONTA.sair();
+      }).then(function () {
+        limparAparelho();
+        saindo = false;
+        avisar('Você saiu da conta.');
+        ir('#/');
+      }).catch(function () {
+        saindo = false;
+        render();
+      });
+    },
     apagarDados: function () {
       if (!window.confirm('Apagar seu nome, respostas e reservas deste aparelho?')) return;
       try { localStorage.removeItem(CHAVE); } catch (e) { /* sem armazenamento */ }
@@ -961,6 +1328,7 @@
   });
 
   document.addEventListener('input', function (evento) {
+    if (evento.target.id === 'email') emailDigitado = evento.target.value.trim(); // passa de uma tela de conta para outra
     if (evento.target.id !== 'nome') return;
     estado.nome = evento.target.value.slice(0, 30);
     salvar();
@@ -986,7 +1354,12 @@
     ritual: { tela: telaRitual, titulo: 'Ritual do dia' },
     revelacao: { tela: telaRevelacao, titulo: 'Revelação' },
     cuidado: { tela: telaCuidado, titulo: 'Roda Cuidado' },
-    perfil: { tela: telaPerfil, titulo: 'Perfil' }
+    perfil: { tela: telaPerfil, titulo: 'Perfil' },
+    // Telas de quem ainda não entrou: quem já está logado é levado para o app
+    'criar-conta': { tela: telaCriarConta, titulo: 'Criar conta', publica: true, visitante: true },
+    entrar: { tela: telaEntrar, titulo: 'Entrar', publica: true, visitante: true },
+    recuperar: { tela: telaRecuperar, titulo: 'Esqueci minha senha', publica: true, visitante: true },
+    'excluir-conta': { tela: telaExcluirConta, titulo: 'Excluir conta' }
   };
 
   function rotaAtual() {
@@ -998,16 +1371,35 @@
     // hasOwnProperty evita que endereços como #/toString caiam em funções internas do JavaScript
     var rota = Object.prototype.hasOwnProperty.call(ROTAS, nome) ? ROTAS[nome] : null;
 
+    // Enquanto o Firebase não diz se há alguém logado, não mostra tela nenhuma (evita piscar a tela errada)
+    if (CONTA && !CONTA.pronto) {
+      document.getElementById('app').innerHTML = telaCarregando();
+      return;
+    }
+    var semConta = !!CONTA && !logado();
+
     if (!rota) {
       ir(estado.onboarded ? '#/inicio' : '#/');
+      return;
+    }
+    if (!CONTA && (rota.visitante || nome === 'excluir-conta')) {
+      ir(estado.onboarded ? '#/inicio' : '#/'); // contas desligadas: telas de conta não existem
+      return;
+    }
+    if (rota.visitante && logado()) {
+      ir(estado.onboarded ? '#/inicio' : '#/quiz');
       return;
     }
     if (!rota.publica && !estado.onboarded) {
       ir('#/');
       return;
     }
+    if (!rota.publica && semConta) {
+      ir('#/criar-conta');
+      return;
+    }
     if (nome === '' && estado.onboarded) {
-      ir('#/inicio');
+      ir(semConta ? '#/criar-conta' : '#/inicio');
       return;
     }
 
@@ -1028,7 +1420,7 @@
     if (mudouDeTela) {
       window.scrollTo(0, 0);
       var principal = document.getElementById('conteudo');
-      var campo = document.getElementById('nome');
+      var campo = document.getElementById('nome') || document.getElementById('email');
       if (campo && !campo.value) campo.focus();
       else if (principal && ultimaRota !== null) principal.focus({ preventScroll: true });
     } else if (focoAnterior) {

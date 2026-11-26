@@ -1159,3 +1159,60 @@ html {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Política de privacidade */
+.politica {
+  padding: 56px 0 72px;
+}
+
+.politica .envoltorio {
+  max-width: 760px;
+}
+
+.politica h1 {
+  margin: 8px 0 0;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(30px, 6vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.politica h2 {
+  margin: 40px 0 0;
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+}
+
+.politica p,
+.politica li {
+  color: var(--texto-suave);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.politica p {
+  margin: 12px 0 0;
+}
+
+.politica ul {
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+
+.politica li + li {
+  margin-top: 8px;
+}
+
+.politica strong {
+  color: var(--texto);
+}
+
+.politica-data {
+  color: var(--lima-texto) !important;
+  font-size: 14px !important;
+  font-weight: 700;
+}
+
+.politica-intro {
+  font-size: 18px !important;
+}
